@@ -67,31 +67,34 @@ class _AdminPageState extends State<AdminPage> {
     "#3\nName\nService",
     "#4\nName\nService",
     "#5\nName\nService",
-    "#6\nName\nService",
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Admin"),
-      ),
-      body: ListView.builder(
-          itemCount: data.length,
-          itemBuilder: (context, index) {
-            return Card(
-              color: Colors.deepOrange,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: ListTile(
-                  title: Text(data[index]),
-                  trailing: const SizedBox(
-                    width: 100,
+        appBar: AppBar(
+          title: const Text("Admin"),
+        ),
+        body: ListView.builder(
+            itemCount: data.length,
+            itemBuilder: (context, index) {
+              return Card(
+                color: Colors.deepOrange,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: ListTile(
+                    title: Text(data[index]),
                   ),
                 ),
-              ),
-            );
-          }),
-    );
+              );
+            }),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () async {
+            _signOut();
+          },
+          label: const Text('Logout'),
+          icon: const Icon(Icons.logout),
+          backgroundColor: Colors.deepOrange,
+        ));
   }
 }
