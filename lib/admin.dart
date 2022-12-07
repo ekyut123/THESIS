@@ -84,6 +84,7 @@ class _AdminPageState extends State<AdminPage> {
                   padding: const EdgeInsets.all(20.0),
                   child: ListTile(
                     title: Text(data[index]),
+                    textColor: Colors.white,
                   ),
                 ),
               );
@@ -92,7 +93,11 @@ class _AdminPageState extends State<AdminPage> {
           onPressed: () async {
             _signOut();
           },
-          label: const Text('Logout'),
+          label: const Text(
+            'Logout',
+            style: TextStyle(
+                fontWeight: FontWeight.bold, fontFamily: 'Montserrat'),
+          ),
           icon: const Icon(Icons.logout),
           backgroundColor: Colors.deepOrange,
         ));
