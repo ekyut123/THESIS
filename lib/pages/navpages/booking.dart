@@ -5,27 +5,23 @@ import 'package:flutter_firebase_users/widgets/image_banner.dart';
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 import 'package:date_time_picker_widget/date_time_picker_widget.dart';
-import '../../widgets/app_long_text.dart';
+import '../widgets/app_long_text.dart';
 
-class BookingPage extends StatefulWidget {
-  const BookingPage(BuildContext context, int i, {super.key});
+class BookingContent extends StatefulWidget {
+  final String name;
+  const BookingContent(BuildContext context, int i,
+      {super.key, required this.name});
 
   @override
   // ignore: library_private_types_in_public_api
-  _BookingPageState createState() => _BookingPageState();
+  _BookingCOntentState createState() => _BookingCOntentState();
 }
 
-class _BookingPageState extends State<BookingPage> {
-  //text editing controller for text field
-  // TextEditingController dateInput = TextEditingController();
-  // TextEditingController timeInput = TextEditingController();
+class _BookingCOntentState extends State<BookingContent> {
   late String _d1 = "";
   late String _t1 = "";
-  // @override
-  // void initState() {
-  //   timeInput.text = ""; //set the initial value of text field
-  //   super.initState();
-  // }
+
+  get name => null;
 
   void _showDialog() {
     showDialog(
@@ -38,7 +34,7 @@ class _BookingPageState extends State<BookingPage> {
                 //dito lalabas yung pinabook ng user.
                 'Confirmation!',
                 style: TextStyle(color: Colors.deepOrange),
-              )
+              ),
             ]),
             actions: <Widget>[
               TextButton(
@@ -80,7 +76,7 @@ class _BookingPageState extends State<BookingPage> {
             //service title
             Container(
               padding: const EdgeInsets.only(left: 15),
-              child: AppLargeText(text: 'Hand Treatment'),
+              child: AppLargeText(text: name),
             ),
             //price
             Container(
@@ -142,8 +138,8 @@ class _BookingPageState extends State<BookingPage> {
           initialSelectedDate: dt,
           startDate: dt.subtract(const Duration(days: 1)),
           endDate: dt.add(const Duration(days: 60)),
-          startTime: DateTime(dt.year, dt.month, dt.day, 6),
-          endTime: DateTime(dt.year, dt.month, dt.day, 18),
+          startTime: DateTime(dt.year, dt.month, dt.day, 9),
+          endTime: DateTime(dt.year, dt.month, dt.day, 21),
           timeInterval: const Duration(minutes: 30),
           datePickerTitle: 'Pick a date',
           timePickerTitle: 'Pick a time',
