@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -14,63 +15,17 @@ class _AdminPageState extends State<AdminPage> {
     FirebaseAuth.instance.signOut();
   }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Column(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         children: <Widget>[
-//           const Text(
-//             "Welcome! Admin",
-//             style: TextStyle(
-//               color: Colors.black,
-//               fontWeight: FontWeight.bold,
-//               fontFamily: 'Montserrat',
-//               fontSize: 30,
-//             ),
-//           ),
-//           const SizedBox(
-//             height: 30,
-//           ),
-//           SizedBox(
-//             height: 40,
-//             child: Material(
-//               borderRadius: BorderRadius.circular(20),
-//               shadowColor: Colors.greenAccent,
-//               color: Colors.black,
-//               elevation: 7,
-//               child: GestureDetector(
-//                 onTap: () async {
-//                   _signOut();
-//                 },
-//                 child: const Center(
-//                   child: Text(
-//                     'LOGOUT',
-//                     style: TextStyle(
-//                       color: Colors.white,
-//                       fontWeight: FontWeight.bold,
-//                       fontFamily: 'Montserrat',
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-  List<String> data = [
-    "#1\nName\nService",
-    "#2\nName\nService",
-    "#3\nName\nService",
-    "#4\nName\nService",
-    "#5\nName\nService",
-  ];
-
   @override
   Widget build(BuildContext context) {
+    List<String> data = [
+      "2022-11-07",
+      "2022-11-05",
+      "2022-12-07",
+      "2022-11-15",
+      "2022-11-10",
+    ];
+    // ignore: unused_local_variable
+    final sortedData = data.sort((a, b) => a.compareTo(b));
     return Scaffold(
         appBar: AppBar(
           title: const Text("Admin"),
@@ -81,7 +36,7 @@ class _AdminPageState extends State<AdminPage> {
               return Card(
                 color: Colors.deepOrange,
                 child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(15.0),
                   child: ListTile(
                     title: Text(data[index]),
                     textColor: Colors.white,
