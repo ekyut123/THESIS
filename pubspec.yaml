@@ -49,6 +49,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   pluto_menu_bar: ^1.1.4
   anim_search_bar: ^2.0.2
+  cached_network_image: ^3.2.3
+  url_launcher: ^6.1.7
+  typicons_flutter: ^0.5.0
 
 dev_dependencies:
   flutter_test:
@@ -94,6 +97,8 @@ flutter:
     - images/services/foot-treatment.jpg
     - images/services/hand-treatment.jpg
     - images/logo.png
+    - images/qrCode.jpg
+    - images/logo1.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
