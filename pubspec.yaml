@@ -80,25 +80,8 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
-    - images/business_logo/beautyloft.jpg
-    - images/business_logo/davids.png
-    - images/business_logo/dermacare.png
-    - images/business_logo/elitista.jpg
-    - images/business_logo/eo.png
-    - images/business_logo/freshaire.jpg
-    - images/business_logo/goingstraight.png
-    - images/business_logo/happybrows.jpg
-    - images/business_logo/idealvision.png
-    - images/business_logo/laybare.png
-    - images/business_logo/nailaholics.jpg
-    - images/business_logo/pinkyswearnails.jpg
-    - images/business_logo/rcdental.jpg
-    - images/business_logo/reyeshaircutters.jpg
-    - images/services/foot-treatment.jpg
-    - images/services/hand-treatment.jpg
-    - images/logo.png
-    - images/qrCode.jpg
-    - images/logo1.png
+    - assets/logo1.png
+    - assets/logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
