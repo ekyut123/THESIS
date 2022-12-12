@@ -18,11 +18,11 @@ class _AdminPageState extends State<AdminPage> {
   @override
   Widget build(BuildContext context) {
     List<String> data = [
-      "2022-11-07",
-      "2022-11-05",
-      "2022-12-07",
-      "2022-11-15",
-      "2022-11-10",
+      "2022-11-07\njericho@gmail.com\nHighlights (bleach) premium",
+      "2022-11-05\noba@gmail.com\nMake-up",
+      "2022-12-07\nrobynn@gmail.com\nHaircut",
+      "2022-11-15\nvon@gmail.com\nHaircut",
+      "2022-11-10\necho@gmail.com\nHaircut",
     ];
     // ignore: unused_local_variable
     final sortedData = data.sort((a, b) => a.compareTo(b));
