@@ -1,10 +1,9 @@
 import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_users/widgets/app_large_text.dart';
+import 'package:flutter_firebase_users/navpages/healthcare_list.dart';
+import 'package:flutter_firebase_users/navpages/personalcare_list.dart';
 //import 'package:thesisapp_test/widgets/app_short_text.dart';
 import 'package:flutter_firebase_users/widgets/navigation_drawer.dart';
-
-import 'business_list.dart';
 
 class ConsumerPage extends StatefulWidget {
   const ConsumerPage({super.key});
@@ -24,7 +23,7 @@ class _ConsumerPageState extends State<ConsumerPage>
         appBar: AppBar(
           title: SizedBox(
             height: 40.0,
-            child: Image.asset('images/logo.png'),
+            child: Image.asset('assets/logo.png'),
           ),
           elevation: 0,
           actions: [
@@ -61,28 +60,18 @@ class _ConsumerPageState extends State<ConsumerPage>
                       ]),
                 ),
               ),
-              //salon and see more
               //firstlayer]
               Container(
-                  height: 500,
+                  height: 600,
                   width: double.maxFinite,
                   margin: const EdgeInsets.only(left: 5),
                   child: TabBarView(
                     controller: tabController,
-                    children: const [ShowBusinessList(), Text("data")],
+                    children: const [
+                      PersonalCareList(label: "Personal Care"),
+                      HealthCareList(label: "Health Care")
+                    ],
                   )),
-              //mema
-              Container(
-                margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                padding: const EdgeInsets.fromLTRB(100, 20, 100, 20),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey,
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: AppLargeText(text: "Become a Pro"),
-              ),
             ],
           ),
         ));
