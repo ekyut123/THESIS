@@ -32,30 +32,7 @@ class _BookingHistory extends State<BookingHistory> {
               color: Colors.deepOrange,
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
-                child: ListTile(
-                  title: Text(data[index]),
-                  trailing: SizedBox(
-                    width: 100,
-                    child: Row(children: [
-                      Expanded(
-                        child: ElevatedButton(
-                            // ignore: sort_child_properties_last
-                            child: const Text("Cancel / Resched"),
-                            onPressed: () {
-                              setState(() {
-                                data.removeAt(index);
-                              });
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors
-                                    .white, //change for background color of the button
-                                foregroundColor: Colors
-                                    .black) //change for the text color of button
-                            ),
-                      ),
-                    ]),
-                  ),
-                ),
+                child: ListTile(title: Text(data[index])),
               ),
             );
           }),
