@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_users/data_source/business_DB.dart';
-import 'package:flutter_firebase_users/model/business_model.dart';
+import '../data_source/business_DB.dart';
+import '../model/business_model.dart';
 import 'business_page.dart';
 
 class HealthCareList extends StatelessWidget {
@@ -31,7 +31,8 @@ class HealthCareList extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (BuildContext context) => BusinessPage(
-                                    chosen: healthcareData[index].businessid,
+                                    chosenbusiness:
+                                        healthcareData[index].businessid,
                                     name: healthcareData[index].businessName,
                                     openingday:
                                         healthcareData[index].openingday,
@@ -43,6 +44,8 @@ class HealthCareList extends StatelessWidget {
                                         healthcareData[index].closinghour,
                                     businessaddress:
                                         healthcareData[index].businessaddress,
+                                    businessimage:
+                                        healthcareData[index].businessImage,
                                   )));
                     },
                     child: Container(
