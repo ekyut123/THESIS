@@ -38,6 +38,7 @@ class _BookingHistory extends State<BookingHistory> {
                       child: Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: ListTile(title: Text(booking[index].date)),
+                        // booking.sort((a, b) => a.compareTo(b));
                       ),
                     );
                   }),
