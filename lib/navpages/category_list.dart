@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_users/data_source/business_DB.dart';
-import 'package:flutter_firebase_users/model/service_model.dart';
 import 'package:flutter_firebase_users/navpages/service_list.dart';
+import '../data_source/business_DB.dart';
+import '../model/service_model.dart';
 import '../widgets/app_semi_large_text.dart';
 
 class ShowCategoryList extends StatelessWidget {
-  final String chosen;
-  const ShowCategoryList({super.key, required this.chosen});
+  final String chosenbusinessid;
+  final String chosenbusinessname;
+  final String chosenbusinessloc;
+
+  const ShowCategoryList(
+      {super.key,
+      required this.chosenbusinessid,
+      required this.chosenbusinessname,
+      required this.chosenbusinessloc});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +33,7 @@ class ShowCategoryList extends StatelessWidget {
             final categoryData = snapshot.data;
             for (var category in categoryData!) {
               bool isAdded = false;
-              if (category.businessid == chosen) {
+              if (category.businessid == chosenbusinessid) {
                 if (businessservices.isEmpty) {
                   businessservices.add(category);
                 } else {
@@ -56,8 +63,11 @@ class ShowCategoryList extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       ShowServiceList(
-                          categorychosen: businessservices[index].categoryName,
-                          height: height * .3)
+                        categorychosen: businessservices[index].categoryName,
+                        height: height * .3,
+                        chosenbusinessname: chosenbusinessname,
+                        chosenbusinessloc: chosenbusinessloc,
+                      )
                     ],
                   );
                 });
