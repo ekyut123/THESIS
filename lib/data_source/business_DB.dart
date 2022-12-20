@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_firebase_users/model/business_model.dart';
 import 'package:flutter_firebase_users/model/service_model.dart';
 
+import '../model/business_bookinginfo.dart';
+
 class BusinessListDB {
   static Stream<List<BusinessInfo>> readbusinessinfo() {
     final businessinfocollection =
@@ -30,5 +32,16 @@ class BusinessListDB {
     final servicecollection = FirebaseFirestore.instance.collection('Services');
     return servicecollection.snapshots().map((querySnapshot) =>
         querySnapshot.docs.map((e) => ServiceInfo.fromSnapshot(e)).toList());
+  }
+
+  static Stream<List<BookingInfo>> readtimeslot(String id, String date) {
+    final bookingcollection = FirebaseFirestore.instance
+        .collection('BusinessList')
+        .doc(id)
+        .collection('Bookings')
+        .doc('All Bookings')
+        .collection(date);
+    return bookingcollection.snapshots().map((querySnapshot) =>
+        querySnapshot.docs.map((e) => BookingInfo.fromSnapshot(e)).toList());
   }
 }
