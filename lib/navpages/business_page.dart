@@ -1,36 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_users/navpages/category_list.dart';
+
 import '../widgets/app_large_text.dart';
 import '../widgets/app_short_text.dart';
 import '../widgets/navigation_drawer.dart';
+import 'category_list.dart';
 
 class BusinessPage extends StatelessWidget {
-  final String chosen;
+  final String chosenbusiness;
   final String name;
   final String openingday;
   final String openinghour;
   final String closingday;
   final String closinghour;
   final String businessaddress;
+  final String businessimage;
 
   const BusinessPage(
       {super.key,
-      required this.chosen,
+      required this.chosenbusiness,
       required this.name,
       required this.openingday,
       required this.openinghour,
       required this.closingday,
       required this.closinghour,
-      required this.businessaddress});
+      required this.businessaddress,
+      required this.businessimage});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const NavigationDrawerWidget(),
       appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: Colors.deepOrange,
-          title: Text(name)),
+        centerTitle: true,
+        backgroundColor: Colors.deepOrange,
+        title: Text(name),
+        //MODIFIED FROM HERE
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.feedback_rounded))
+        ],
+        // UNTIL HERE
+      ),
       body: Column(
         children: [
           Container(
@@ -47,6 +56,7 @@ class BusinessPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AppLargeText(text: name),
+                    const SizedBox(height: 5),
                     AppShortText(text: businessaddress, color: Colors.black)
                   ],
                 ),
@@ -58,15 +68,19 @@ class BusinessPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text("$openingday - $closingday"),
-                      Text("$openinghour - $closinghour"),
+                      Text("${openingday} - ${closingday}"),
+                      Text("${openinghour} - ${closinghour}"),
                     ],
                   )),
             ],
           ),
           const SizedBox(height: 10),
           Expanded(
-            child: ShowCategoryList(chosen: chosen),
+            child: ShowCategoryList(
+              chosenbusinessid: chosenbusiness,
+              chosenbusinessname: name,
+              chosenbusinessloc: businessaddress,
+            ),
           ),
         ],
       ),
