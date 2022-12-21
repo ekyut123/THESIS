@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'data_source/booking_DB.dart';
+import 'model/booking_model.dart';
 // ignore: depend_on_referenced_packages
 
 class AdminPage extends StatefulWidget {
@@ -10,51 +13,85 @@ class AdminPage extends StatefulWidget {
   _AdminPageState createState() => _AdminPageState();
 }
 
-class _AdminPageState extends State<AdminPage> {
+class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
   Future<void> _signOut() async {
     FirebaseAuth.instance.signOut();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<String> data = [
-      "2022-11-07\njericho@gmail.com\nHighlights (bleach) premium",
-      "2022-11-05\noba@gmail.com\nMake-up",
-      "2022-12-07\nrobynn@gmail.com\nHaircut",
-      "2022-11-15\nvon@gmail.com\nHaircut",
-      "2022-11-10\necho@gmail.com\nHaircut",
-    ];
-    // ignore: unused_local_variable
-    final sortedData = data.sort((a, b) => a.compareTo(b));
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text("Admin"),
-        ),
-        body: ListView.builder(
-            itemCount: data.length,
-            itemBuilder: (context, index) {
-              return Card(
-                color: Colors.deepOrange,
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: ListTile(
-                    title: Text(data[index]),
-                    textColor: Colors.white,
+    return StreamBuilder<List<BookingInfo>>(
+        stream: BookingDB.readbookinginfo(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return const Center(child: Text('some error occured'));
+          }
+          if (snapshot.hasData) {
+            final booking = snapshot.data;
+            return DefaultTabController(
+              length: 2,
+              child: Scaffold(
+                appBar: AppBar(
+                  bottom: const TabBar(
+                    tabs: [
+                      Tab(text: "Today's Booking"),
+                      Tab(text: "Tomorrow's Booking"),
+                    ],
                   ),
+                  title: const Text("Admin"),
                 ),
-              );
-            }),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            _signOut();
-          },
-          label: const Text(
-            'Logout',
-            style: TextStyle(
-                fontWeight: FontWeight.bold, fontFamily: 'Montserrat'),
-          ),
-          icon: const Icon(Icons.logout),
-          backgroundColor: Colors.deepOrange,
-        ));
+                body: TabBarView(
+                  // ignore: sort_child_properties_last
+                  children: [
+                    ListView.builder(
+                        itemCount: booking!.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            color: Colors.deepOrange,
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: ListTile(
+                                title: Text(booking[index].date),
+                                textColor: Colors.white,
+                              ),
+                            ),
+                          );
+                        }),
+                    ListView.builder(
+                        itemCount: booking.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            color: Colors.deepOrange,
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: ListTile(
+                                title: Text(booking[index].date),
+                                textColor: Colors.white,
+                              ),
+                            ),
+                          );
+                        }),
+                  ],
+                ),
+                floatingActionButton: FloatingActionButton.extended(
+                  onPressed: () async {
+                    _signOut();
+                  },
+                  label: const Text(
+                    'Logout',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontFamily: 'Montserrat'),
+                  ),
+                  icon: const Icon(Icons.logout),
+                  backgroundColor: Colors.deepOrange,
+                ),
+              ),
+            );
+          }
+          return const Center(child: CircularProgressIndicator());
+        });
   }
 }
