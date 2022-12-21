@@ -35,13 +35,13 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
               length: 2,
               child: Scaffold(
                 appBar: AppBar(
+                  title: const Text("Admin"),
                   bottom: const TabBar(
                     tabs: [
                       Tab(text: "Today's Booking"),
                       Tab(text: "Tomorrow's Booking"),
                     ],
                   ),
-                  title: const Text("Admin"),
                 ),
                 body: TabBarView(
                   // ignore: sort_child_properties_last
