@@ -37,6 +37,7 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
                 appBar: AppBar(
                   title: const Text("Admin"),
                   bottom: const TabBar(
+                    indicator: BoxDecoration(color: Colors.orange),
                     tabs: [
                       Tab(text: "Today's Booking"),
                       Tab(text: "Tomorrow's Booking"),
@@ -50,9 +51,22 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
                         itemCount: booking!.length,
                         itemBuilder: (context, index) {
                           return Card(
-                            color: Colors.deepOrange,
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
+                            elevation: 5,
+                            child: Container(
+                              height: 150,
+                              decoration: const BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [Colors.deepOrange, Colors.orange],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black87,
+                                      blurRadius: 5,
+                                      offset: Offset(0, 3),
+                                    )
+                                  ]),
                               child: ListTile(
                                 title: Text(booking[index].date),
                                 textColor: Colors.white,
@@ -64,9 +78,22 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
                         itemCount: booking.length,
                         itemBuilder: (context, index) {
                           return Card(
-                            color: Colors.deepOrange,
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
+                            elevation: 5,
+                            child: Container(
+                              height: 150,
+                              decoration: const BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [Colors.deepOrange, Colors.orange],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black87,
+                                      blurRadius: 5,
+                                      offset: Offset(0, 3),
+                                    ),
+                                  ]),
                               child: ListTile(
                                 title: Text(booking[index].date),
                                 textColor: Colors.white,
