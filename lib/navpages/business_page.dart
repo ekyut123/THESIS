@@ -77,12 +77,7 @@ class BusinessPage extends StatelessWidget {
                 openinghour = snapshot.data!['opening hour'];
                 
                 return Scaffold(
-                  drawer: NavigationDrawerWidget(
-                    consumeremail: email,
-                    consumerfirstname: firstName,
-                    consumerlastname: lastName,
-                    consumerphonenum: phoneNumber
-                  ),
+                  drawer: const NavigationDrawerWidget(),
                   appBar: AppBar(
                     centerTitle: true,
                     backgroundColor: Colors.deepOrange,
