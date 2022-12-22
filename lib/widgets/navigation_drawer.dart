@@ -18,8 +18,8 @@ import '../navpages/termsandconditions_page.dart';
 class NavigationDrawerWidget extends StatelessWidget {
   
   const NavigationDrawerWidget({
-    super.key, required String consumeremail, required String consumerfirstname, required String consumerlastname, required String consumerphonenum,
-    });
+    super.key
+  });
   Future<void> _signOut() async {
     FirebaseAuth.instance.signOut();
   }
@@ -71,18 +71,18 @@ class NavigationDrawerWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 10.0),
                   // terms and condition
-                  buildMenuItem(
-                    text: 'Active Booking',
-                    icon: Icons.article_outlined,
-                    onClicked: (() {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => const ActiveBookingPage(),
-                        )
-                      );
-                    })
-                  ),
+                  // buildMenuItem(
+                  //   text: 'Active Booking',
+                  //   icon: Icons.article_outlined,
+                  //   onClicked: (() {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (BuildContext context) => const ActiveBookingPage(),
+                  //       )
+                  //     );
+                  //   })
+                  // ),
                   const SizedBox(height: 10.0),
                   //booking history
                   // buildMenuItem(
