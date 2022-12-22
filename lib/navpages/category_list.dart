@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_users/navpages/service_list.dart';
-import '../data_source/business_DB.dart';
+import '../data_source/read_DB.dart';
 import '../model/service_model.dart';
 import '../widgets/app_semi_large_text.dart';
 
 class ShowCategoryList extends StatelessWidget {
   final String chosenbusinessid;
-  final String chosenbusinessname;
-  final String chosenbusinessloc;
 
   const ShowCategoryList(
       {super.key,
       required this.chosenbusinessid,
-      required this.chosenbusinessname,
-      required this.chosenbusinessloc});
+    });
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +18,7 @@ class ShowCategoryList extends StatelessWidget {
     final double height = MediaQuery.of(context).size.height;
     final List<ServiceInfo> businessservices = [];
     return StreamBuilder<List<ServiceInfo>>(
-        stream: BusinessListDB.readserviceinfo(),
+        stream: ReadDataBase.readserviceinfo(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -65,8 +62,6 @@ class ShowCategoryList extends StatelessWidget {
                       ShowServiceList(
                         categorychosen: businessservices[index].categoryName,
                         height: height * .3,
-                        chosenbusinessname: chosenbusinessname,
-                        chosenbusinessloc: chosenbusinessloc,
                       )
                     ],
                   );
