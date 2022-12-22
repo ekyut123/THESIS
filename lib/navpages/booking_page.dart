@@ -298,12 +298,7 @@ class _BookingPageState extends State<BookingPage> {
                         icon: const Icon(Icons.book),
                         backgroundColor: Colors.deepOrange,
                       ),
-                      drawer: NavigationDrawerWidget(
-                        consumeremail: email,
-                        consumerfirstname: firstName,
-                        consumerlastname: lastName,
-                        consumerphonenum: phoneNumber
-                      ),
+                      drawer: const NavigationDrawerWidget(),
                       appBar: AppBar(
                         centerTitle: true,
                         backgroundColor: Colors.deepOrange,
