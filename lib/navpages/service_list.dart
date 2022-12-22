@@ -1,29 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../data_source/business_DB.dart';
+import '../data_source/read_DB.dart';
 import '../model/service_model.dart';
 import '../widgets/app_short_text.dart';
 import 'booking_page.dart';
 
 class ShowServiceList extends StatelessWidget {
   final double height;
-  final String chosenbusinessname;
   final String categorychosen;
-  final String chosenbusinessloc;
 
   const ShowServiceList({
     super.key,
     required this.categorychosen,
     required this.height,
-    required this.chosenbusinessname,
-    required this.chosenbusinessloc,
   });
 
   @override
   Widget build(BuildContext context) {
     final businessservices = [];
     return StreamBuilder<List<ServiceInfo>>(
-        stream: BusinessListDB.readserviceinfo(),
+        stream: ReadDataBase.readserviceinfo(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -48,45 +44,31 @@ class ShowServiceList extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                        final dt = DateTime.now();
-                        final int DV = 0;
-                        //day
-                        final String dy = DateFormat.d().format(dt);
-                        int intdy = int.tryParse(dy) ?? DV;
-                        //month
-                        final String month = DateFormat.MMM().format(dt);
-                        final String nummonth = DateFormat.M().format(dt);
-                        final int intmonth = int.tryParse(nummonth) ?? DV;
-                        //year
-                        final String yr = DateFormat.y().format(dt);
-                        //get date tom
-                        int intdytom = intdy + 1;
-                        final String daytom = intdytom.toString();
-                        final String date = "${daytom} ${month}, ${yr}";
+                      final dt = DateTime.now();
+                      final int DV = 0;
+                      //day
+                      final String dy = DateFormat.d().format(dt);
+                      int intdy = int.tryParse(dy) ?? DV;
+                      //month
+                      final String month = DateFormat.MMM().format(dt);
+                      final String nummonth = DateFormat.M().format(dt);
+                      final int intmonth = int.tryParse(nummonth) ?? DV;
+                      //year
+                      final String yr = DateFormat.y().format(dt);
+                      int intyr = int.tryParse(yr) ?? DV;
+                      //get date tom
+                      int intdytom = intdy + 1;
+                      final String daytom = intdytom.toString();
+                      final String date = "${daytom} ${month}, ${yr}";
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (BuildContext context) => BookingPage(
-                                      chosenservicename:
-                                          businessservices[index].serviceName,
-                                      serviceDescription:
-                                          businessservices[index]
-                                              .serviceDescription,
-                                      serviceimage:
-                                          businessservices[index].serviceImage,
-                                      serviceprice:
-                                          businessservices[index].servicePrice,
-                                      chosenbusinessid:
-                                          businessservices[index].businessid,
-                                      chosenbusinessname: chosenbusinessname,
-                                      chosenserviceid:
-                                          businessservices[index].serviceid,
-                                      categoryName:
-                                          businessservices[index].categoryName,
-                                      chosenbusinessloc: chosenbusinessloc,
+                                      chosenserviceid: businessservices[index].serviceid,
                                       date: date,
                                       intdy: intdytom,
                                       intmonth: intmonth,
+                                      intyr: intyr,
                                     )));
                       },
                       child: Expanded(
