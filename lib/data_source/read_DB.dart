@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_firebase_users/model/business_model.dart';
-import 'package:flutter_firebase_users/model/service_model.dart';
-
+import '../model/business_model.dart';
+import '../model/service_model.dart';
+import '../model/active_booking.dart';
 import '../model/business_bookinginfo.dart';
 
-class BusinessListDB {
+class ReadDataBase {
   static Stream<List<BusinessInfo>> readbusinessinfo() {
     final businessinfocollection =
         FirebaseFirestore.instance.collection('BusinessList');
@@ -38,10 +38,19 @@ class BusinessListDB {
     final bookingcollection = FirebaseFirestore.instance
         .collection('BusinessList')
         .doc(id)
-        .collection('Bookings')
-        .doc('All Bookings')
-        .collection(date);
+        .collection('All Bookings')
+        .doc(date)
+        .collection('Slots');
     return bookingcollection.snapshots().map((querySnapshot) =>
         querySnapshot.docs.map((e) => BookingInfo.fromSnapshot(e)).toList());
+  }
+
+  static Stream<List<ActiveBooking>> readactivebooking(String userid) {
+    final userbookingcollection = FirebaseFirestore.instance
+    .collection('Users')
+    .doc(userid)
+    .collection('Active Booking');
+    return userbookingcollection.snapshots().map((querySnapshot) =>
+        querySnapshot.docs.map((e) => ActiveBooking.fromSnapshot(e)).toList());
   }
 }
