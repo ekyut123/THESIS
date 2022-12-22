@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
-import '../data_source/business_DB.dart';
+import '../data_source/read_DB.dart';
 import '../model/business_model.dart';
 import 'business_page.dart';
 
 class HealthCareList extends StatelessWidget {
-  final String label;
-  const HealthCareList({super.key, required this.label});
+  final String label;  
+
+  const HealthCareList({
+    super.key,
+    required this.label,
+  });
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<BusinessInfo>>(
-        stream: BusinessListDB.readhealthcareinfo(),
+        stream: ReadDataBase.readhealthcareinfo(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -32,20 +36,7 @@ class HealthCareList extends StatelessWidget {
                           MaterialPageRoute(
                               builder: (BuildContext context) => BusinessPage(
                                     chosenbusiness:
-                                        healthcareData[index].businessid,
-                                    name: healthcareData[index].businessName,
-                                    openingday:
-                                        healthcareData[index].openingday,
-                                    openinghour:
-                                        healthcareData[index].openinghour,
-                                    closingday:
-                                        healthcareData[index].closingday,
-                                    closinghour:
-                                        healthcareData[index].closinghour,
-                                    businessaddress:
-                                        healthcareData[index].businessaddress,
-                                    businessimage:
-                                        healthcareData[index].businessImage,
+                                        healthcareData[index].businessid
                                   )));
                     },
                     child: Container(
