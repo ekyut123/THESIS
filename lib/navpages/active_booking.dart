@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_users/data_source/read_DB.dart';
+import 'package:flutter_firebase_users/widgets/app_semi_large_text.dart';
+import '../data_source/read_DB.dart';
+import '../navpages/resched_page.dart';
+import '../widgets/app_large_text.dart';
 import '../model/active_booking.dart';
-import 'booking_page.dart';
 import 'package:intl/intl.dart';
 
 class ActiveBookingPage extends StatefulWidget {
@@ -12,64 +15,300 @@ class ActiveBookingPage extends StatefulWidget {
   State<ActiveBookingPage> createState() => _ActiveBookingPageState();
 }
 
+final String userid = FirebaseAuth.instance.currentUser!.uid;
+//service booking info
+String datetime = "";
+String olddatetime = "";
+String sdchosenbusinessid = "";
+String sdchosenbusinessname = "";
+String sdchosenservicename = "";
+String sdchosenserviceid = "";
+String timeslot = "";
+String date = "";
+String olddate = "";
+int intslot = 0;
+String slot = "";
+String oldslot = "";
+
 class _ActiveBookingPageState extends State<ActiveBookingPage> {
+
+  // read booking details
+  Future<DocumentSnapshot<Map<String, dynamic>>> readactivebookinginfo(String userid, String datetime) async{
+      return await FirebaseFirestore.instance.collection('Users').doc(userid).collection('Active Booking').doc(datetime).get();
+  }
+  //read business info
+  Future<DocumentSnapshot<Map<String, dynamic>>> readbusinessinfo(String businessid) async{
+      return await FirebaseFirestore.instance.collection('BusinessList').doc(businessid).get();
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    void showAlertDialog(context, index) {
-    // set up the buttons
-    Widget cancelButton = TextButton(
-      style: TextButton.styleFrom(
-        backgroundColor: Colors.deepOrange,
-      ),
-      child: const Text(
-        "Yes",
-        style: TextStyle(color: Colors.white),
-      ),
-      onPressed: () {
-        Navigator.of(context).pop();
-        setState(() {
-           //booking.removeAt(index);
-        });
-      },
-    );
     
-    Widget continueButton = TextButton(
-      style: TextButton.styleFrom(
-        backgroundColor: Colors.deepOrange,
-      ),
-      child: const Text(
-        "No",
-        style: TextStyle(color: Colors.white),
-      ),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
+    void showConfirmedDialog(){
+      showDialog(
+        context: context,
+        builder: (BuildContext context){
+          return AlertDialog(
+            title: const Text('Booking Cancelled!'),
+            content: const Text('Book to us again next time. Thank you!'),
+            actions: [
+              TextButton(style: TextButton.styleFrom(
+                backgroundColor: Colors.deepOrange,
+              ),
+              child: const Text(
+                "Exit",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop(const ActiveBookingPage());
+                }
+              )
+            ],
+          );
+        });
+    }
+    
+    void showCancelDialog(){
+      showDialog(
+        context: context,
+        builder: (BuildContext context){
+          return AlertDialog(
+            title: const Text(
+              'Cancel Booking',
+              style: TextStyle(
+                color: Colors.deepOrange
+              )
+            ),
+            content: const Text('Do you want to cancel the booking?'),
+            actions: [
+              TextButton(
+                style: TextButton.styleFrom(backgroundColor: Colors.deepOrange),
+                child: const Text("No", style: TextStyle(color: Colors.white)),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                }
+              ),
+              TextButton(
+                style: TextButton.styleFrom(backgroundColor: Colors.deepOrange),
+                child: const Text("Yes", style: TextStyle(color: Colors.white)),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  FirebaseFirestore.instance
+                  .collection('Users')
+                  .doc(userid)
+                  .collection('Active Booking')
+                  .doc(datetime)
+                  .delete();
 
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: const Text(
-        "Cancellation",
-        style: TextStyle(color: Colors.deepOrange),
-      ),
-      content: const Text("Are you sure that you want to cancel your booking?"),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
+                  FirebaseFirestore.instance
+                  .collection('BusinessList')
+                  .doc(sdchosenbusinessid)
+                  .collection('All Bookings')
+                  .doc(date)
+                  .collection('Slots')
+                  .doc(slot)
+                  .delete();
+                  showConfirmedDialog();
+                }
+              )
+            ],
+          );
+        }
+      );
+    }
 
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-    final String userid = FirebaseAuth.instance.currentUser!.uid;
+    void showReschedDialog(){
+      showDialog(
+        context: context,
+        builder: (BuildContext context){
+          return AlertDialog(
+            title: const Text(
+              'Reschedule Booking',
+              style: TextStyle(
+                color: Colors.deepOrange
+              )
+            ),
+            content: const Text('Do you want to reschedule the booking?'),
+            actions: [
+              TextButton(
+                style: TextButton.styleFrom(backgroundColor: Colors.deepOrange),
+                child: const Text("No", style: TextStyle(color: Colors.white)),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                }
+              ),
+              TextButton(
+                style: TextButton.styleFrom(backgroundColor: Colors.deepOrange),
+                child: const Text("Yes", style: TextStyle(color: Colors.white)),
+                onPressed: () {
+                  final dt = DateTime.now();
+                  final int DV = 0;
+                  //day
+                  final String dy = DateFormat.d().format(dt);
+                  int intdy = int.tryParse(dy) ?? DV;
+                  //month
+                  final String month = DateFormat.MMM().format(dt);
+                  final String nummonth = DateFormat.M().format(dt);
+                  final int intmonth = int.tryParse(nummonth) ?? DV;
+                  //year
+                  final String yr = DateFormat.y().format(dt);
+                  int intyr = int.tryParse(yr) ?? DV;
+                  //get date tom
+                  int intdytom = intdy + 1;
+                  final String daytom = intdytom.toString();
+                  final String date = "${daytom} ${month}, ${yr}";
+                  
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ReschedulePage(
+                      chosenserviceid: sdchosenserviceid,
+                      date: date,
+                      intdy: intdytom,
+                      intmonth: intmonth,
+                      intyr: intyr,
+                      olddatetime: olddatetime,
+                      oldslot: oldslot,
+                      olddate: olddate,
+                    )
+                  )
+                );
+              }
+            )
+          ],
+        );
+      });
+    }
+    
+    void showMoreInfoDialog(){
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return FutureBuilder(
+            future: readactivebookinginfo(userid, datetime),
+            builder: (context, snapshot){
+              if(snapshot.hasData){
+                datetime = snapshot.data!['datetime'];
+                sdchosenbusinessid = snapshot.data!['sdchosenbusinessid'];
+                sdchosenbusinessname = snapshot.data!['sdchosenbusinessname'];
+                sdchosenserviceid = snapshot.data!['sdchosenserviceid'];
+                sdchosenservicename = snapshot.data!['sdchosenservicename'];
+                timeslot = snapshot.data!['timeslot'];
+                date = snapshot.data!['date'];
+                intslot = snapshot.data!['slot'];
+                slot = intslot.toString();
+
+                return AlertDialog(
+                  title: AppLargeText(text: 'Booking Details:'.toUpperCase()),
+                  content: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AppLargeText(text: sdchosenbusinessname),
+                      //business address
+                      FutureBuilder(
+                        future: readbusinessinfo(sdchosenbusinessid),
+                        builder: (context, snapshot) {
+                          if(snapshot.hasData){
+                            return Text(snapshot.data!['business address']);
+                          }
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                      ),
+                      const SizedBox(height: 10),
+                      //service name
+                      Container(
+                        color: Colors.white70,
+                        height: 30,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: const [
+                            Icon(Icons.bookmark_add),
+                            SizedBox(width: 5),
+                            Text('Service: ', textAlign: TextAlign.center),
+                          ],
+                        ),
+                      ),
+                      Center(
+                        child: Text(sdchosenservicename, textAlign: TextAlign.left),
+                      ),
+                      const SizedBox(height: 20),
+                      //date time
+                      Container(
+                        color: Colors.white70,
+                        height: 30,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: const [
+                            Icon(Icons.calendar_today),
+                            SizedBox(width: 5),
+                            Text(
+                              'Date & Time: ',
+                              textAlign: TextAlign.left,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Center(
+                        child: Text(datetime, textAlign: TextAlign.center),
+                      ),
+                    ]
+                  ),
+                  actions: [
+                    //exit
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.deepOrange,
+                      ),
+                      child: const Text(
+                        "Exit",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop(ActiveBookingPage);
+                      }
+                    ),
+                    //cancel
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.deepOrange,
+                      ),
+                      child: const Text(
+                        "Cancel",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        showCancelDialog();
+                      }
+                    ),
+                    //resched
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.deepOrange,
+                      ),
+                      child: const Text(
+                        "Reschedule",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        olddate = date;
+                        olddatetime = datetime;
+                        oldslot = slot;
+                        Navigator.of(context).pop();
+                        showReschedDialog();
+                      }
+                    ),
+                  ],
+                );
+              }
+              return const Center(child: CircularProgressIndicator());
+            }
+          );
+        }
+      );
+    }
+    
     return StreamBuilder<List<ActiveBooking>>(
       stream: ReadDataBase.readactivebooking(userid),
       builder: (context, snapshot) {
@@ -90,63 +329,27 @@ class _ActiveBookingPageState extends State<ActiveBookingPage> {
                   itemCount: activebooking!.length,
                   itemBuilder: (context, index) {
                     return Card(
-                      color: Colors.deepOrange,
+                      color: Colors.white70,
                       child: ListTile(
-                        title: Text(activebooking[index].servicename),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
+                        title: AppSemiLargeText(text: activebooking[index].businessname),
+                        subtitle: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            //cancel
-                            ElevatedButton(
-                              onPressed: () {
-                                showAlertDialog(context, index);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors                
-                                .white, //change for background color of the button
-                                foregroundColor: Colors.black),
-                                child: const Text('Cancel')),
-                            const SizedBox(width: 8),
-                            //resched
-                            ElevatedButton(
-                                onPressed: () {
-                                  final dt = DateTime.now();
-                                  final int DV = 0;
-                                  //day
-                                  final String dy = DateFormat.d().format(dt);
-                                  int intdy = int.tryParse(dy) ?? DV;
-                                  //month
-                                  final String month = DateFormat.MMM().format(dt);
-                                  final String nummonth = DateFormat.M().format(dt);
-                                  final int intmonth = int.tryParse(nummonth) ?? DV;
-                                  //year
-                                  final String yr = DateFormat.y().format(dt);
-                                  int intyr = int.tryParse(yr) ?? DV;
-                                  //get date tom
-                                  int intdytom = intdy + 1;
-                                  final String daytom = intdytom.toString();
-                                  final String date = "${daytom} ${month}, ${yr}";
-
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                               BookingPage(
-                                                chosenserviceid: activebooking[index].serviceid,
-                                                date: date,
-                                                intdy: intdytom,
-                                                intmonth: intmonth,
-                                                intyr: intyr
-                                              )));
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors
-                                        .white, //change for background color of the button
-                                    foregroundColor: Colors.black),
-                                child: const Text(
-                                    'Reschedule') //change for the text color of button
-                                ),
+                            Text(activebooking[index].servicename),
+                            Text(activebooking[index].date),
                           ],
+                        ),
+                        trailing: ElevatedButton(
+                          child: const Text('More Info'),
+                          onPressed: () {
+                            datetime = activebooking[index].datetime;
+                            showMoreInfoDialog();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.black
+                          ),
                         ),
                       ),
                     );
