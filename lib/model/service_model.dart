@@ -31,8 +31,6 @@ class ServiceInfo {
         serviceDescription: snapshot['serviceDescription']);
   }
 
-  get categoryid => null;
-
   Map<String, dynamic> toJson() => {
         "businessid": businessid,
         "categoryName": categoryName,
