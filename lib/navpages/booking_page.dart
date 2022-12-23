@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_users/main.dart';
+import 'package:flutter_firebase_users/widgets/app_semi_large_text.dart';
 import '../data_source/read_DB.dart';
 import '../model/b_bookinginfo.dart';
 import '../utils.dart';
@@ -96,15 +97,11 @@ class _BookingPageState extends State<BookingPage> {
         builder: (BuildContext context) {
           return AlertDialog(
             // ignore: prefer_const_literals_to_create_immutables
-            title: Row(children: const [
-              Text(
-                'Confirmed!',
-                style: TextStyle(color: Colors.deepOrange),
-              ),
-            ]),
-            content: Row(children: const [
-              Text('Thank you so much for booking!'),
-            ]),
+            title: const Text(
+              'Confirmed!',
+              style: TextStyle(color: Colors.deepOrange),
+            ),
+            content: const Text('Thank you so much for booking!'),
             actions: <Widget>[
               TextButton(
                   style: TextButton.styleFrom(
@@ -148,19 +145,17 @@ class _BookingPageState extends State<BookingPage> {
               
               return AlertDialog(
                 // ignore: prefer_const_literals_to_create_immutables
-                title: Row(children: [
-                  AppLargeText(
-                    text: 'Booking Info:'.toUpperCase(),
-                  ),
-                ]),
+                title: AppLargeText(text: 'Booking Info:'.toUpperCase()),
                 content:
-                  Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min, children: [
                   FutureBuilder(
                     future: readbusinessinfo(businessid),
                     builder: (context, snapshot) {
                       if(snapshot.hasData){
                         businessName = snapshot.data!['businessName'];
-                        return Text(businessName);
+                        return AppSemiLargeText(text: businessName);
                       }
                       return const Center(child: CircularProgressIndicator());
                     }
@@ -249,7 +244,7 @@ class _BookingPageState extends State<BookingPage> {
                       ),
                       onPressed: () {
                         confirmBooking();
-                        Navigator.of(context).pop(_showConfirmedDialog);
+                        Navigator.of(context).pop();
                       }),
                 ],
               );
@@ -283,7 +278,6 @@ class _BookingPageState extends State<BookingPage> {
                 serviceName = snapshot.data!['serviceName'];
                 servicePrice = snapshot.data!['servicePrice'];
                 serviceid = snapshot.data!['serviceid'];
-                print(serviceName);
 
                 return FutureBuilder(
                   future: readbusinessinfo(businessid),
@@ -782,6 +776,7 @@ class _BookingPageState extends State<BookingPage> {
       'slot': intslot,
       'timeStamp': timeStamp,
       'datetime': datetime,
+      'date' : _d1
     };
 
     var setDate = {
