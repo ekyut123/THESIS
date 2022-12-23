@@ -5,6 +5,7 @@ import '../widgets/app_large_text.dart';
 import '../widgets/app_short_text.dart';
 import '../widgets/navigation_drawer.dart';
 import 'category_list.dart';
+import '../navpages/rating_page.dart';
 
 class BusinessPage extends StatelessWidget {
   final String chosenbusiness;
@@ -83,7 +84,18 @@ class BusinessPage extends StatelessWidget {
                     backgroundColor: Colors.deepOrange,
                     title: Text(businessName),
                     actions: [
-                      IconButton(onPressed: () {}, icon: const Icon(Icons.feedback_rounded))
+                      Tooltip(
+                        message: 'Ratings ',
+                        child: IconButton(
+                          icon: const Icon(Icons.feedback_rounded),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => RatingPage(businessid: chosenbusiness,
+                            )
+                          )
+                        );
+                        }),
+                      )
                     ],
                   ),
                   body: Column(
