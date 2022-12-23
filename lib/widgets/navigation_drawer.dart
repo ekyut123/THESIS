@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_users/pages/navpages/settings_page.dart';
-import 'package:flutter_firebase_users/pages/navpages/termsandconditions_page.dart';
-import 'package:flutter_firebase_users/pages/navpages/contact-us_page.dart';
-import 'package:flutter_firebase_users/pages/navpages/booking-history.dart';
-import 'package:flutter_firebase_users/pages/navpages/settings_page.dart';
+import 'package:flutter_firebase_users/navpages/settings_page.dart';
+import 'package:flutter_firebase_users/navpages/termsandconditions_page.dart';
+import 'package:flutter_firebase_users/navpages/contact-us_page.dart';
+import 'package:flutter_firebase_users/navpages/booking-history.dart';
+import 'package:flutter_firebase_users/navpages/settings_page.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   const NavigationDrawerWidget({super.key});
