@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../model/rating_model.dart';
+import '../model/booking_history.dart';
 import '../model/business_model.dart';
 import '../model/service_model.dart';
 import '../model/active_booking.dart';
-import '../model/business_bookinginfo.dart';
+import '../model/b_bookinginfo.dart';
 
 class ReadDataBase {
   static Stream<List<BusinessInfo>> readbusinessinfo() {
@@ -49,8 +51,26 @@ class ReadDataBase {
     final userbookingcollection = FirebaseFirestore.instance
     .collection('Users')
     .doc(userid)
-    .collection('Active Booking');
+    .collection('Active Booking').orderBy('date');
     return userbookingcollection.snapshots().map((querySnapshot) =>
         querySnapshot.docs.map((e) => ActiveBooking.fromSnapshot(e)).toList());
   }
+
+  static Stream<List<BookingHistory>> readbookinghistory(String userid) {
+    final userbookinghistorycollection = FirebaseFirestore.instance
+    .collection('Users')
+    .doc(userid)
+    .collection('Booking History').orderBy('date');
+    return userbookinghistorycollection.snapshots().map((querySnapshot) =>
+        querySnapshot.docs.map((e) => BookingHistory.fromSnapshot(e)).toList());
+  }
+  static Stream<List<RatingModel>> readrating(String businessid) {
+    final ratingcollection = FirebaseFirestore.instance
+    .collection('BusinessList')
+    .doc(businessid)
+    .collection('Ratings').orderBy('date', descending: true);
+    return ratingcollection.snapshots().map((querySnapshot) =>
+        querySnapshot.docs.map((e) => RatingModel.fromSnapshot(e)).toList());
+  }
+
 }
