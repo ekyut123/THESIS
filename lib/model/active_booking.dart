@@ -10,6 +10,7 @@ class ActiveBooking {
   final int slot;
   final int timeStamp;
   final String datetime;
+  final String date;
 
   const ActiveBooking({
     required this.businessid,
@@ -21,6 +22,7 @@ class ActiveBooking {
     required this.slot,
     required this.timeStamp,
     required this.datetime,
+    required this.date
   });
 
   factory ActiveBooking.fromSnapshot(DocumentSnapshot snap) {
@@ -36,6 +38,7 @@ class ActiveBooking {
       timeslot: snapshot['timeslot'],
       datetime: snapshot['datetime'],
       slot: snapshot['slot'],
+      date: snapshot['date']
     );
   }
 
@@ -48,6 +51,7 @@ class ActiveBooking {
     "slot": slot,
     "timeslot": timeslot,
     "timeStamp": timeStamp,
-    "datetime" : datetime
+    "datetime" : datetime,
+    "date" : date
   };
 }
