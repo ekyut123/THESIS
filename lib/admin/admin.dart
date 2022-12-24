@@ -81,6 +81,7 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
       String timeslot,
       int slot,
       int timestamp) async {
+    bool rated = false;
     final docBookingHistory = FirebaseFirestore.instance
         .collection('Users')
         .doc(id)
@@ -96,7 +97,8 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
       'slot': slot,
       'timeStamp': timestamp,
       'timeslot': timeslot,
-      'docid': docBookingHistory.id
+      'docid': docBookingHistory.id,
+      'rated': rated,
     };
     await docBookingHistory.set(bookinghistoryjson);
   }
