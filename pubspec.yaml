@@ -52,6 +52,7 @@ dependencies:
   cached_network_image: ^3.2.3
   url_launcher: ^6.1.7
   typicons_flutter: ^0.5.0
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:
