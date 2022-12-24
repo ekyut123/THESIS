@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_firebase_users/admin/checkHasLogged.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'consumer.dart';
-import 'admin.dart';
 
 //the user must have the 'admin' role to acess the admin page,
 //otherwise user will go to consumer page
 //'admin' must be all lowercase characters
 final FirebaseAuth _auth = FirebaseAuth.instance;
-final _formKey1 = GlobalKey<FormState>();
+GlobalKey<FormState> _formKey1 = GlobalKey<FormState>();
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -101,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       } else {
                         // //checks role in database
                         if (snapshot.data!['role'] == 'admin') {
-                          return const AdminPage();
+                          return const CheckHasLogged();
                         } else {
                           return const ConsumerPage();
                         }
@@ -140,7 +140,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: const Text(
                             "SRVCS",
                             style: TextStyle(
-                                fontSize: 40, fontWeight: FontWeight.bold),
+                                color: Colors.deepOrange,
+                                fontSize: 40,
+                                fontWeight: FontWeight.bold),
                           ),
                         )
                       ],
@@ -189,7 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Text(
                               'Forgot Password',
                               style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.deepOrange,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'Montserrat',
                                   decoration: TextDecoration.underline),
@@ -203,24 +205,27 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     SizedBox(
                       height: 40,
-                      child: Material(
-                        borderRadius: BorderRadius.circular(20),
-                        shadowColor: Colors.greenAccent,
-                        color: Colors.black,
-                        elevation: 7,
-                        child: GestureDetector(
-                          onTap: () async {
-                            if (_formKey1.currentState!.validate()) {
-                              _signIn();
-                            }
-                          },
-                          child: const Center(
-                            child: Text(
-                              'LOGIN',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Montserrat',
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(120, 0, 120, 0),
+                        child: Material(
+                          borderRadius: BorderRadius.circular(20),
+                          shadowColor: Colors.black,
+                          color: Colors.deepOrange,
+                          elevation: 7,
+                          child: GestureDetector(
+                            onTap: () async {
+                              if (_formKey1.currentState!.validate()) {
+                                _signIn();
+                              }
+                            },
+                            child: const Center(
+                              child: Text(
+                                'LOGIN',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Montserrat',
+                                ),
                               ),
                             ),
                           ),
@@ -240,7 +245,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: const Text(
                             'Register',
                             style: TextStyle(
-                                color: Colors.blueGrey,
+                                color: Colors.deepOrange,
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.bold,
                                 decoration: TextDecoration.underline),
