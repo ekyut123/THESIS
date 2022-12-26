@@ -4,7 +4,7 @@ import '../model/business_model.dart';
 import 'business_page.dart';
 
 class HealthCareList extends StatelessWidget {
-  final String label;  
+  final String label;
 
   const HealthCareList({
     super.key,
@@ -35,9 +35,8 @@ class HealthCareList extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (BuildContext context) => BusinessPage(
-                                    chosenbusiness:
-                                        healthcareData[index].businessid
-                                  )));
+                                  chosenbusiness:
+                                      healthcareData[index].businessid)));
                     },
                     child: Container(
                       margin: const EdgeInsets.symmetric(vertical: 5),
