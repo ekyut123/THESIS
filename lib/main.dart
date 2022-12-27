@@ -18,14 +18,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        title: 'SRVCS',
         theme: ThemeData(
           primarySwatch: Colors.deepOrange,
         ),
-        home: const MyHomePage(title: 'Flutter Demo Home Page'),
+        home: const MyHomePage(title: 'SRVCS Login'),
         routes: <String, WidgetBuilder>{
           '/signup': (BuildContext context) => const SignupPage(),
-          '/student': (BuildContext context) => const ConsumerPage(),
+          '/consumer': (BuildContext context) => const ConsumerPage(),
           '/otp': (BuildContext context) => const OtpScreen(),
           '/main': (BuildContext context) => const MyApp(),
         });
