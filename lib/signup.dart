@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_users/navpages/termsandconditions_page.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_field/phone_number.dart';
@@ -51,6 +52,7 @@ class _SignupPageState extends State<SignupPage> {
   @override
   void initState() {
     super.initState();
+    loading = false;
     _emailController.clear();
     _passwordController.clear();
     _confirmController.clear();
@@ -74,6 +76,11 @@ class _SignupPageState extends State<SignupPage> {
       'role': role,
     };
     await docUser.set(json);
+    setState(() {
+      loading = false;
+    });
+    if (!mounted) return;
+    Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
   }
 
   void _register(String phonecontroller, BuildContext context) async {
@@ -82,30 +89,6 @@ class _SignupPageState extends State<SignupPage> {
               email: _emailController.text, password: _passwordController.text))
           .user;
       if (user != null) {
-        _auth.verifyPhoneNumber(
-            phoneNumber: phonecontroller,
-            timeout: const Duration(seconds: 60),
-            verificationCompleted: (verificationCompleted) {
-              setState(() {
-                loading = false;
-              });
-            },
-            verificationFailed: (verificationFailed) {
-              setState(() {
-                loading = false;
-              });
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("An Error Has Occured")));
-            },
-            codeSent: (verificationId, forceResendingToken) {
-              setState(() {
-                loading = false;
-              });
-              SignupPage.verification = verificationId;
-              SignupPage.phoneNo = phonecontroller;
-              Navigator.pushNamed(context, '/otp');
-            },
-            codeAutoRetrievalTimeout: (codeAutoRetrievalTimeout) {});
         createUser(_fnameController.text, _lnameController.text,
             _phoneController.text, _emailController.text, user);
       }
@@ -356,14 +339,24 @@ class _SignupPageState extends State<SignupPage> {
                                 SizedBox(
                                   width: size.width * 0.01,
                                 ),
-                                const Expanded(
-                                    child: Text(
-                                  "By checking this box, I affirm that I have read and accepted the Terms and Conditions.",
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    color: Colors.grey,
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  TermsAndConditions()));
+                                    },
+                                    child: const Text(
+                                      "By checking this box, I affirm that I have read and accepted the Terms and Conditions.",
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
                                   ),
-                                ))
+                                )
                               ],
                             ),
                             const SizedBox(
