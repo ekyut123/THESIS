@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_firebase_users/admin/checkHasLogged.dart';
+ import 'package:flutter_firebase_users/admin/checkHasLogged.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'consumer.dart';
 
@@ -124,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Text('Something went wrong'),
                     );
                   }
-                  return const CircularProgressIndicator();
+                  return const Center(child: CircularProgressIndicator());
                 },
               );
             } else {
@@ -184,20 +184,20 @@ class _MyHomePageState extends State<MyHomePage> {
                         const SizedBox(
                           height: 5,
                         ),
-                        Container(
-                          alignment: const Alignment(1, 0),
-                          padding: const EdgeInsets.only(top: 15, left: 20),
-                          child: const InkWell(
-                            child: Text(
-                              'Forgot Password',
-                              style: TextStyle(
-                                  color: Colors.deepOrange,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Montserrat',
-                                  decoration: TextDecoration.underline),
-                            ),
-                          ),
-                        )
+                        // Container(
+                        //   alignment: const Alignment(1, 0),
+                        //   padding: const EdgeInsets.only(top: 15, left: 20),
+                        //   child: const InkWell(
+                        //     child: Text(
+                        //       'Forgot Password',
+                        //       style: TextStyle(
+                        //           color: Colors.deepOrange,
+                        //           fontWeight: FontWeight.bold,
+                        //           fontFamily: 'Montserrat',
+                        //           decoration: TextDecoration.underline),
+                        //     ),
+                        //   ),
+                        // )
                       ]),
                     ),
                     const SizedBox(
