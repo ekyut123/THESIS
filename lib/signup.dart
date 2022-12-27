@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_users/navpages/termsandconditions_page.dart';
 import 'package:form_field_validator/form_field_validator.dart';
@@ -341,24 +342,42 @@ class _SignupPageState extends State<SignupPage> {
                                 SizedBox(
                                   width: size.width * 0.01,
                                 ),
+                                // Expanded(
+                                //   child: GestureDetector(
+                                //     onTap: () {
+                                //       Navigator.push(
+                                //           context,
+                                //           MaterialPageRoute(
+                                //               builder: (BuildContext context) =>
+                                //                   TermsAndConditions()));
+                                //     },
                                 Expanded(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  TermsAndConditions()));
-                                    },
-                                    child: const Text(
-                                      "By checking this box, I affirm that I have read and accepted the Terms and Conditions.",
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                        color: Colors.grey,
+                                    child: RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      const TextSpan(
+                                        text:
+                                            "By checking this box, I affirm that I have read and accepted the ",
+                                        style: TextStyle(color: Colors.black),
                                       ),
-                                    ),
+                                      TextSpan(
+                                          text: "Terms and Conditions.",
+                                          style: const TextStyle(
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              color: Colors.blue),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          TermsAndConditions()));
+                                            }),
+                                    ],
                                   ),
-                                )
+                                ))
                               ],
                             ),
                             const SizedBox(
