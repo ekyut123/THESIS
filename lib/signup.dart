@@ -125,7 +125,7 @@ class _SignupPageState extends State<SignupPage> {
         child: Material(
           borderRadius: BorderRadius.circular(20),
           shadowColor: Colors.greenAccent,
-          color: Colors.black,
+          color: Colors.deepOrange,
           elevation: 7,
           child: GestureDetector(
             onTap: () async {
@@ -198,7 +198,9 @@ class _SignupPageState extends State<SignupPage> {
                         child: const Text(
                           "Signup",
                           style: TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.bold),
+                              color: Colors.deepOrange,
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
@@ -362,7 +364,11 @@ class _SignupPageState extends State<SignupPage> {
                             const SizedBox(
                               height: 20,
                             ),
-                            Container(child: _signupbutton(value)),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(120, 0, 120, 0),
+                              child: Container(child: _signupbutton(value)),
+                            ),
                             const SizedBox(
                               height: 15,
                             ),
@@ -376,7 +382,7 @@ class _SignupPageState extends State<SignupPage> {
                                   child: const Text(
                                     'Go Back',
                                     style: TextStyle(
-                                        color: Colors.blueGrey,
+                                        color: Colors.deepOrange,
                                         fontFamily: 'Montserrat',
                                         fontWeight: FontWeight.bold,
                                         decoration: TextDecoration.underline),
