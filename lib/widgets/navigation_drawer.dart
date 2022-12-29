@@ -92,12 +92,6 @@ class NavigationDrawerWidget extends StatelessWidget {
                               ));
                         })),
                     const SizedBox(height: 10.0),
-                    //fave
-                    buildMenuItem(
-                      text: 'Favorites',
-                      icon: Icons.favorite_border,
-                    ),
-                    const SizedBox(height: 10.0),
                     //contact us
                     buildMenuItem(
                         text: 'Contact Us',
