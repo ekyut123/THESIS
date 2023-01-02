@@ -11,7 +11,7 @@ import 'package:intl_phone_field/phone_number.dart';
 import 'widgets/loading.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
-final _formKey = GlobalKey<FormState>();
+GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 bool loading = false;
 
 class SignupPage extends StatefulWidget {
