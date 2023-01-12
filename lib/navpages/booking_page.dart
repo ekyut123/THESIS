@@ -43,6 +43,7 @@ class BookingPage extends StatefulWidget {
   String servicePrice= "";
   String serviceid = "";
   String businessName = "";
+  late String datetime;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String email = "";
@@ -255,6 +256,33 @@ class _BookingPageState extends State<BookingPage> {
         });
   }
 
+  void _showTakenDialog(){
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            // ignore: prefer_const_literals_to_create_immutables
+            title: Text(
+              datetime,
+              style: const TextStyle(color: Colors.deepOrange),
+            ),
+            content: const Text('You already have an appointment with this slot. Please select a different slot.'),
+            actions: <Widget>[
+              TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.deepOrange,
+                  ),
+                  child: const Text(
+                    "Exit",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop(BookingPage);
+                  }),
+            ],
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -286,7 +314,7 @@ class _BookingPageState extends State<BookingPage> {
                       return Scaffold(
                       floatingActionButton: FloatingActionButton.extended(
                         onPressed: selectedtime == '' ? null : () {
-                          _showBookingInfo();
+                          readactivebooking();
                         },
                         label: const Text('Book'),
                         icon: const Icon(Icons.book),
@@ -743,9 +771,31 @@ class _BookingPageState extends State<BookingPage> {
     return const Center(child: CircularProgressIndicator());
   }
 
+
+  readactivebooking(){
+    datetime = '$selectedtime - $_d1';
+    debugPrint(datetime);
+                          
+    CollectionReference activebooking = FirebaseFirestore.instance
+    .collection('Users')
+    .doc(uid)
+    .collection('Active Booking');
+    
+    debugPrint('1');
+    activebooking.doc(datetime)
+    .get()
+    .then((DocumentSnapshot documentSnapshot) {
+      debugPrint('2');
+      if (documentSnapshot.exists) {
+        _showTakenDialog();
+      }else{
+        _showBookingInfo();
+      }
+    });
+  }
+  
   confirmBooking() {
     var timeStamp = DateTime(intyr, intmonth, intdy, inthr, intmin).millisecond;
-    final String datetime = '$selectedtime - $_d1';
     
     // business admin
     var submitBookingInfo = {
