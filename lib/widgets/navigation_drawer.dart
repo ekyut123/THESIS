@@ -117,19 +117,6 @@ class NavigationDrawerWidget extends StatelessWidget {
                                     TermsAndConditions(),
                               ));
                         })),
-//                     const SizedBox(height: 10.0),
-//                     buildMenuItem(
-//                         text: 'Settings',
-//                         icon: Icons.settings,
-//                         onClicked: (() {
-//                           Navigator.push(
-//                               context,
-//                               MaterialPageRoute(
-//                                 builder: (BuildContext context) =>
-//                                     const SettingsPage(),
-//                               ));
-//                         })),
-                    const SizedBox(height: 270.0),
                     //added for logout -rob :)
                     Row(
                       // ignore: prefer_const_literals_to_create_immutables
