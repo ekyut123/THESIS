@@ -2,9 +2,11 @@ import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_users/navpages/healthcare_list.dart';
 import 'package:flutter_firebase_users/navpages/personalcare_list.dart';
+import 'package:flutter_firebase_users/searchdelegate.dart';
 //import 'package:thesisapp_test/widgets/app_short_text.dart';
 import 'package:flutter_firebase_users/widgets/navigation_drawer.dart';
 
+//added search
 class ConsumerPage extends StatefulWidget {
   const ConsumerPage({super.key});
 
@@ -25,6 +27,13 @@ class _ConsumerPageState extends State<ConsumerPage>
             height: 40.0,
             child: Image.asset('assets/logo.png'),
           ),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  showSearch(context: context, delegate: MySearchDelegate());
+                },
+                icon: const Icon(Icons.search))
+          ],
           //SearchButton
           // elevation: 0,
           // actions: [
