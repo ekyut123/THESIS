@@ -34,60 +34,82 @@ class AllBookingPage extends StatelessWidget {
                         child: Text("No Ongoing Bookings on this day"),
                       );
                     } else {
-                      return ListView.builder(
-                        itemCount: slot!.length,
-                        itemBuilder: (context, index) {
-                          return Material(
-                            child: GestureDetector(
-                              onTap: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        content: SingleChildScrollView(
-                                          child: Column(
-                                            children: [
-                                              bookingtile('Name: ',
-                                                  '${slot[index].consumerfirstname} ${slot[index].consumerlastname}'),
-                                              bookingtile(
-                                                  'Service Name: ',
-                                                  slot[index]
-                                                      .sdchosenservicename),
-                                              bookingtile('Date and Time: ',
-                                                  slot[index].datetime),
-                                              bookingtile('Email: ',
-                                                  slot[index].consumeremail),
-                                              bookingtile('Phone Number: ',
-                                                  slot[index].consumerphonenum),
-                                            ],
-                                          ),
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                            child: Center(
+                                child: Text(
+                              "Ongoing Appointments: ${slot!.length}",
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            )),
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: slot.length,
+                              itemBuilder: (context, index) {
+                                return Material(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              content: SingleChildScrollView(
+                                                child: Column(
+                                                  children: [
+                                                    bookingtile('Name: ',
+                                                        '${slot[index].consumerfirstname} ${slot[index].consumerlastname}'),
+                                                    bookingtile(
+                                                        'Service Name: ',
+                                                        slot[index]
+                                                            .sdchosenservicename),
+                                                    bookingtile(
+                                                        'Date and Time: ',
+                                                        slot[index].datetime),
+                                                    bookingtile(
+                                                        'Email: ',
+                                                        slot[index]
+                                                            .consumeremail),
+                                                    bookingtile(
+                                                        'Phone Number: ',
+                                                        slot[index]
+                                                            .consumerphonenum),
+                                                  ],
+                                                ),
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: const Text("BACK",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.grey)))
+                                              ],
+                                            );
+                                          });
+                                    },
+                                    child: Card(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: ListTile(
+                                          title: Text(
+                                              slot[index].sdchosenservicename),
+                                          subtitle: Text(
+                                              '${slot[index].datetime} | ${slot[index].consumerfirstname} ${slot[index].consumerlastname}'),
                                         ),
-                                        actions: [
-                                          TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text("BACK",
-                                                  style: TextStyle(
-                                                      color: Colors.grey)))
-                                        ],
-                                      );
-                                    });
-                              },
-                              child: Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: ListTile(
-                                    title:
-                                        Text(slot[index].sdchosenservicename),
-                                    subtitle: Text(
-                                        '${slot[index].datetime} | ${slot[index].consumerfirstname} ${slot[index].consumerlastname}'),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
+                                );
+                              },
                             ),
-                          );
-                        },
+                          ),
+                        ],
                       );
                     }
                   } else if (snapshot.hasError) {
