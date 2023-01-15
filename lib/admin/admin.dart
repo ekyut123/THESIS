@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_users/admin/allBooking.dart';
 import 'package:flutter_firebase_users/admin/data_source/accomplished_DB.dart';
@@ -8,7 +7,9 @@ import 'package:flutter_firebase_users/admin/data_source/allBooking_DB.dart';
 import 'package:flutter_firebase_users/admin/data_source/cancelled_DB.dart';
 import 'package:flutter_firebase_users/admin/data_source/slot_DB.dart';
 import 'package:flutter_firebase_users/admin/widget/booking_tiles.dart';
+import 'package:flutter_firebase_users/admin/widget/drawer.dart';
 import 'package:intl/intl.dart';
+
 // ignore: depend_on_referenced_packages
 
 class AdminPage extends StatefulWidget {
@@ -189,6 +190,7 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
     return DefaultTabController(
         length: 4,
         child: Scaffold(
+          drawer: const AdminDrawer(),
           appBar: AppBar(
             title: const Text("Admin"),
             bottom: const TabBar(
@@ -487,31 +489,50 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
                   if (snapshot.hasData) {
                     if (snapshot.data!.isEmpty) {
                       return const Center(
-                        child: Text("No Ongoing Bookings on this day"),
+                        child: Text("No Ongoing Bookings"),
                       );
                     } else {
-                      return ListView.builder(
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) {
-                          return Material(
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => AllBookingPage(
-                                        date: snapshot.data![index].date,
-                                        uid: user!.uid)));
-                              },
-                              child: Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15),
-                                  child: ListTile(
-                                    title: Text(snapshot.data![index].date),
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                            child: Center(
+                                child: Text(
+                              "Ongoing Appointment Dates: ${snapshot.data!.length}",
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            )),
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                return Material(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AllBookingPage(
+                                                      date: snapshot
+                                                          .data![index].date,
+                                                      uid: user!.uid)));
+                                    },
+                                    child: Card(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(15),
+                                        child: ListTile(
+                                          title:
+                                              Text(snapshot.data![index].date),
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
+                                );
+                              },
                             ),
-                          );
-                        },
+                          ),
+                        ],
                       );
                     }
                   } else if (snapshot.hasError) {
@@ -534,64 +555,83 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
                       );
                     } else {
                       final accomplish = snapshot.data;
-                      return ListView.builder(
-                        itemCount: accomplish!.length,
-                        itemBuilder: (context, index) {
-                          return Material(
-                            child: GestureDetector(
-                              onTap: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        content: SingleChildScrollView(
-                                          child: Column(
-                                            children: [
-                                              bookingtile('Name: ',
-                                                  '${accomplish[index].consumerfirstname} ${accomplish[index].consumerlastname}'),
-                                              bookingtile(
-                                                  'Service Name: ',
-                                                  accomplish[index]
-                                                      .sdchosenservicename),
-                                              bookingtile('Date and Time: ',
-                                                  accomplish[index].datetime),
-                                              bookingtile(
-                                                  'Email: ',
-                                                  accomplish[index]
-                                                      .consumeremail),
-                                              bookingtile(
-                                                  'Phone Number: ',
-                                                  accomplish[index]
-                                                      .consumerphonenum),
-                                            ],
-                                          ),
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                            child: Center(
+                                child: Text(
+                              "Accomplished Appointments: ${accomplish!.length}",
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            )),
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: accomplish.length,
+                              itemBuilder: (context, index) {
+                                return Material(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              content: SingleChildScrollView(
+                                                child: Column(
+                                                  children: [
+                                                    bookingtile('Name: ',
+                                                        '${accomplish[index].consumerfirstname} ${accomplish[index].consumerlastname}'),
+                                                    bookingtile(
+                                                        'Service Name: ',
+                                                        accomplish[index]
+                                                            .sdchosenservicename),
+                                                    bookingtile(
+                                                        'Date and Time: ',
+                                                        accomplish[index]
+                                                            .datetime),
+                                                    bookingtile(
+                                                        'Email: ',
+                                                        accomplish[index]
+                                                            .consumeremail),
+                                                    bookingtile(
+                                                        'Phone Number: ',
+                                                        accomplish[index]
+                                                            .consumerphonenum),
+                                                  ],
+                                                ),
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: const Text("BACK",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.grey)))
+                                              ],
+                                            );
+                                          });
+                                    },
+                                    child: Card(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: ListTile(
+                                          title: Text(accomplish[index]
+                                              .sdchosenservicename),
+                                          subtitle: Text(
+                                              '${accomplish[index].datetime} | ${accomplish[index].consumerfirstname} ${accomplish[index].consumerlastname}'),
                                         ),
-                                        actions: [
-                                          TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text("BACK",
-                                                  style: TextStyle(
-                                                      color: Colors.grey)))
-                                        ],
-                                      );
-                                    });
-                              },
-                              child: Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: ListTile(
-                                    title: Text(
-                                        accomplish[index].sdchosenservicename),
-                                    subtitle: Text(
-                                        '${accomplish[index].datetime} | ${accomplish[index].consumerfirstname} ${accomplish[index].consumerlastname}'),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
+                                );
+                              },
                             ),
-                          );
-                        },
+                          ),
+                        ],
                       );
                     }
                   } else if (snapshot.hasError) {
@@ -614,64 +654,83 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
                       );
                     } else {
                       final cancelled = snapshot.data;
-                      return ListView.builder(
-                        itemCount: cancelled!.length,
-                        itemBuilder: (context, index) {
-                          return Material(
-                            child: GestureDetector(
-                              onTap: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        content: SingleChildScrollView(
-                                          child: Column(
-                                            children: [
-                                              bookingtile('Name: ',
-                                                  '${cancelled[index].consumerfirstname} ${cancelled[index].consumerlastname}'),
-                                              bookingtile(
-                                                  'Service Name: ',
-                                                  cancelled[index]
-                                                      .sdchosenservicename),
-                                              bookingtile('Date and Time: ',
-                                                  cancelled[index].datetime),
-                                              bookingtile(
-                                                  'Email: ',
-                                                  cancelled[index]
-                                                      .consumeremail),
-                                              bookingtile(
-                                                  'Phone Number: ',
-                                                  cancelled[index]
-                                                      .consumerphonenum),
-                                            ],
-                                          ),
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                            child: Center(
+                                child: Text(
+                              "Cancelled Appointments: ${cancelled!.length}",
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            )),
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: cancelled.length,
+                              itemBuilder: (context, index) {
+                                return Material(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              content: SingleChildScrollView(
+                                                child: Column(
+                                                  children: [
+                                                    bookingtile('Name: ',
+                                                        '${cancelled[index].consumerfirstname} ${cancelled[index].consumerlastname}'),
+                                                    bookingtile(
+                                                        'Service Name: ',
+                                                        cancelled[index]
+                                                            .sdchosenservicename),
+                                                    bookingtile(
+                                                        'Date and Time: ',
+                                                        cancelled[index]
+                                                            .datetime),
+                                                    bookingtile(
+                                                        'Email: ',
+                                                        cancelled[index]
+                                                            .consumeremail),
+                                                    bookingtile(
+                                                        'Phone Number: ',
+                                                        cancelled[index]
+                                                            .consumerphonenum),
+                                                  ],
+                                                ),
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: const Text("BACK",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.grey)))
+                                              ],
+                                            );
+                                          });
+                                    },
+                                    child: Card(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: ListTile(
+                                          title: Text(cancelled[index]
+                                              .sdchosenservicename),
+                                          subtitle: Text(
+                                              '${cancelled[index].datetime} | ${cancelled[index].consumerfirstname} ${cancelled[index].consumerlastname}'),
                                         ),
-                                        actions: [
-                                          TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text("BACK",
-                                                  style: TextStyle(
-                                                      color: Colors.grey)))
-                                        ],
-                                      );
-                                    });
-                              },
-                              child: Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: ListTile(
-                                    title: Text(
-                                        cancelled[index].sdchosenservicename),
-                                    subtitle: Text(
-                                        '${cancelled[index].datetime} | ${cancelled[index].consumerfirstname} ${cancelled[index].consumerlastname}'),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
+                                );
+                              },
                             ),
-                          );
-                        },
+                          ),
+                        ],
                       );
                     }
                   } else if (snapshot.hasError) {
