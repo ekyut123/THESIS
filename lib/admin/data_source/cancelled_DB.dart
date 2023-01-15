@@ -12,4 +12,15 @@ class CancelledDB {
     return slotscollection.snapshots().map((querySnapshot) =>
         querySnapshot.docs.map((e) => CancelledInfo.fromSnapshot(e)).toList());
   }
+
+  static Stream<List<CancelledInfo>> readCancelledDate(
+      String uid, String date) {
+    final datecollection = FirebaseFirestore.instance
+        .collection('BusinessList')
+        .doc(uid)
+        .collection('Cancelled')
+        .where('date', isEqualTo: date);
+    return datecollection.snapshots().map((querySnapshot) =>
+        querySnapshot.docs.map((e) => CancelledInfo.fromSnapshot(e)).toList());
+  }
 }
