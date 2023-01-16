@@ -14,8 +14,25 @@ class ConsumerPage extends StatefulWidget {
   State<ConsumerPage> createState() => _ConsumerPageState();
 }
 
+final String userid = FirebaseAuth.instance.currentUser!.uid;
+final FirebaseAuth _auth = FirebaseAuth.instance;
+
+late String email;
+late String firstName;
+late String lastName;
+late String phoneNumber;
+
 class _ConsumerPageState extends State<ConsumerPage>
     with TickerProviderStateMixin {
+  
+  Future<DocumentSnapshot<Map<String, dynamic>>> getUser() async {
+    User? user = _auth.currentUser!;
+    return await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(user.uid)
+        .get();
+  }
+  
   @override
   Widget build(BuildContext context) {
     TabController tabController = TabController(length: 2, vsync: this);
@@ -78,8 +95,8 @@ class _ConsumerPageState extends State<ConsumerPage>
                   child: TabBarView(
                     controller: tabController,
                     children: const [
-                      PersonalCareList(label: "Personal Care"),
-                      HealthCareList(label: "Health Care")
+                      PersonalCareList(label: "Personal Care", uid: userid),
+                      HealthCareList(label: "Health Care", uid: userid)
                     ],
                   )),
             ],
