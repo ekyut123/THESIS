@@ -245,6 +245,7 @@ class _BookingPageState extends State<BookingPage> {
                       ),
                       onPressed: () {
                         confirmBooking();
+                        updatecounter();
                         Navigator.of(context).pop();
                       }),
                 ],
@@ -283,6 +284,7 @@ class _BookingPageState extends State<BookingPage> {
           );
         });
   }
+  
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -781,11 +783,9 @@ class _BookingPageState extends State<BookingPage> {
     .doc(uid)
     .collection('Active Booking');
     
-    debugPrint('1');
     activebooking.doc(datetime)
     .get()
     .then((DocumentSnapshot documentSnapshot) {
-      debugPrint('2');
       if (documentSnapshot.exists) {
         _showTakenDialog();
       }else{
@@ -795,6 +795,7 @@ class _BookingPageState extends State<BookingPage> {
   }
   
   confirmBooking() {
+
     var timeStamp = DateTime(intyr, intmonth, intdy, inthr, intmin).millisecond;
     
     // business admin
@@ -855,6 +856,15 @@ class _BookingPageState extends State<BookingPage> {
     CollectionReference userbookingcollection = firestoreconsumer.collection('Active Booking');
     userbookingcollection.doc(datetime)
     .set(submitActiveBooking);
+
   }
   
+  updatecounter() async {
+    // Update Booked Counter
+    await FirebaseFirestore.instance
+    .collection('Users')
+    .doc(uid)
+    .collection('Booked Counter')
+    .doc(businessid).set({'counter': FieldValue.increment(1)}, SetOptions(merge: true));
+  }
 }
