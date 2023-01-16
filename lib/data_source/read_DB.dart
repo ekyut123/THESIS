@@ -85,4 +85,13 @@ class ReadDataBase {
     return ratingcollection.snapshots().map((querySnapshot) =>
         querySnapshot.docs.map((e) => RatingModel.fromSnapshot(e)).toList());
   }
+  
+  static Stream<List<CounterModel>> readbookedcounter(String userid, String label) {
+    final ratingcollection = FirebaseFirestore.instance
+    .collection('Users')
+    .doc(userid)
+    .collection('Booked Counter').where('businessType', isEqualTo: label).orderBy('counter', descending: true);
+    return ratingcollection.snapshots().map((querySnapshot) =>
+        querySnapshot.docs.map((e) => CounterModel.fromSnapshot(e)).toList());
+  }
 }
