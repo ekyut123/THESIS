@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../model/rating_model.dart';
+import '../model/counter_model.dart';
 import '../model/booking_history.dart';
 import '../model/business_model.dart';
 import '../model/service_model.dart';
