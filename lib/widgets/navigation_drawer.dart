@@ -56,7 +56,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                     //home
                     buildMenuItem(
                         text: 'Home',
-                        icon: Icons.article_outlined,
+                        icon: Icons.home,
                         onClicked: (() {
                           Navigator.push(
                               context,
