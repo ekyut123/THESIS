@@ -32,7 +32,6 @@ late bool rated;
 late String ratingstring;
 
 class _BookingHistoryPageState extends State<BookingHistoryPage> {
-
   double rating = 0;
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getUser() async {
@@ -43,155 +42,168 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
         .get();
   }
 
-  void showThankYouDialog(){
+  void showThankYouDialog() {
     showDialog(
-      context: context,
-      builder: (BuildContext context){
-        return AlertDialog(
-          title: const Text(
-            'Rating has been submitted!'
-          ),
-          content: const Text('Thank you so much for rating!'),
-          actions: [
-            TextButton(
-              style: TextButton.styleFrom(backgroundColor: Colors.deepOrange,),
-              child: const Text('Done', style: TextStyle(color: Colors.white)),
-              onPressed: (){
-                Navigator.of(context).pop();
-              })
-          ],
-        );
-      });
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Rating has been submitted!'),
+            content: const Text('Thank you so much for rating!'),
+            actions: [
+              TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.deepOrange,
+                  ),
+                  child:
+                      const Text('Done', style: TextStyle(color: Colors.white)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  })
+            ],
+          );
+        });
   }
 
-  void showDatingDialog(){
+  void showDatingDialog() {
     showDialog(
-      context: context,
-      builder: (BuildContext context){
-        return AlertDialog(
-          title: const Text('Rate the Service'),
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Please leave a star rating.'),
-              const SizedBox(height: 10),
-              buildRating()
-            ]
-          ),
-          actions: [
-            TextButton(
-              style: TextButton.styleFrom(backgroundColor: Colors.deepOrange),
-              child: const Text('Exit', style: TextStyle(color: Colors.white)),
-              onPressed: (){
-                Navigator.of(context).pop();
-              }
-            ),
-            TextButton(
-              style: TextButton.styleFrom(backgroundColor: Colors.deepOrange),
-              child: const Text('Rate', style: TextStyle(color: Colors.white)),
-              onPressed: (){
-                submitRating();
-                Navigator.of(context).pop();
-              }
-            ),
-          ],
-        );
-      }
-    );
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Rate the Service'),
+            content: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('Please leave a star rating.'),
+                  const SizedBox(height: 10),
+                  buildRating()
+                ]),
+            actions: [
+              TextButton(
+                  style:
+                      TextButton.styleFrom(backgroundColor: Colors.deepOrange),
+                  child:
+                      const Text('Exit', style: TextStyle(color: Colors.white)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+              TextButton(
+                  style:
+                      TextButton.styleFrom(backgroundColor: Colors.deepOrange),
+                  child:
+                      const Text('Rate', style: TextStyle(color: Colors.white)),
+                  onPressed: () {
+                    submitRating();
+                    Navigator.of(context).pop();
+                  }),
+            ],
+          );
+        });
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<BookingHistory>>(
-      stream: ReadDataBase.readbookinghistory(userid),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (snapshot.hasError) {
-          print(snapshot.error);
-          return const Center(child: Text('some error occured'));
-        }
-        if(snapshot.hasData){
-          final bookinghistory = snapshot.data;
+        stream: ReadDataBase.readbookinghistory(userid),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            print(snapshot.error);
+            return const Center(child: Text('some error occured'));
+          }
+          if (snapshot.hasData) {
+            final bookinghistory = snapshot.data;
 
-          return FutureBuilder(
-            future: getUser(),
-            builder: (context, snapshot){
-              if(snapshot.hasData){
-                email = snapshot.data!['email'];
-                firstName = snapshot.data!['first name'];
-                lastName = snapshot.data!['last name'];
-                phoneNumber = snapshot.data!['phone number'];
+            return FutureBuilder(
+                future: getUser(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    email = snapshot.data!['email'];
+                    firstName = snapshot.data!['first name'];
+                    lastName = snapshot.data!['last name'];
+                    phoneNumber = snapshot.data!['phone number'];
 
-              return Scaffold(
-                  appBar: AppBar(
-                    title: const Text("Booking History"),
-                  ),
-                  body: ListView.builder(
-                      itemCount: bookinghistory!.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          color: Colors.white70,
-                          child: ListTile(
-                            title: AppSemiLargeText(text: bookinghistory[index].sdchosenbusinessname),
-                            subtitle: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(bookinghistory[index].sdchosenservicename),
-                                Text(bookinghistory[index].datetime)
-                              ],
-                            ),
-                            trailing: ElevatedButton(
-                              child: Text('Submit Rating'),
-                              onPressed: bookinghistory[index].rated == true ? null : () {
-                                docid = bookinghistory[index].docid;
-                                sdchosenbusinessid = bookinghistory[index].sdchosenbusinessid;
-                                sdchosenbusinessname = bookinghistory[index].sdchosenbusinessname;
-                                sdchosenserviceid = bookinghistory[index].sdchosenserviceid;
-                                sdchosenservicename = bookinghistory[index].sdchosenservicename;
-                                datetime = bookinghistory[index].datetime;
-                                date = bookinghistory[index].date;
+                    return Scaffold(
+                      appBar: AppBar(
+                        title: const Text("Booking History"),
+                      ),
+                      body: ListView.builder(
+                          itemCount: bookinghistory!.length,
+                          itemBuilder: (context, index) {
+                            return Card(
+                              color: Colors.white70,
+                              child: ListTile(
+                                title: AppSemiLargeText(
+                                    text: bookinghistory[index]
+                                        .sdchosenbusinessname),
+                                subtitle: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(bookinghistory[index]
+                                        .sdchosenservicename),
+                                    Text(bookinghistory[index].datetime)
+                                  ],
+                                ),
+                                trailing: ElevatedButton(
+                                  child: Text('Submit Rating'),
+                                  onPressed: bookinghistory[index].rated == true
+                                      ? null
+                                      : () {
+                                          docid = bookinghistory[index].docid;
+                                          sdchosenbusinessid =
+                                              bookinghistory[index]
+                                                  .sdchosenbusinessid;
+                                          sdchosenbusinessname =
+                                              bookinghistory[index]
+                                                  .sdchosenbusinessname;
+                                          sdchosenserviceid =
+                                              bookinghistory[index]
+                                                  .sdchosenserviceid;
+                                          sdchosenservicename =
+                                              bookinghistory[index]
+                                                  .sdchosenservicename;
+                                          datetime =
+                                              bookinghistory[index].datetime;
+                                          date = bookinghistory[index].date;
 
-                                showDatingDialog();
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                foregroundColor: Colors.black
+                                          showDatingDialog();
+                                        },
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.white,
+                                      foregroundColor: Colors.black),
+                                ),
                               ),
-                            ),
-                          ),
-                        );
-                      }),
-                );
-              }
-              return const Center(child: CircularProgressIndicator()); 
-            }
-          );
-        }
-        return const Center(child: CircularProgressIndicator());
-      }
-    );
+                            );
+                          }),
+                    );
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                });
+          }
+          return const Center(child: CircularProgressIndicator());
+        });
   }
 
   Widget buildRating() => RatingBar.builder(
-    minRating: 1,
-    itemBuilder: (context, _) => const Icon(Icons.star),
-    itemSize: 30,
-    updateOnDrag: true,
-    glowColor: Colors.deepOrange,
-    onRatingUpdate: (rating){
-      setState(() {
-        this.rating = rating;
-        ratingstring = rating.toString();
+      minRating: 1,
+      itemBuilder: (context, _) => const Icon(
+            Icons.star,
+            color: Colors.deepOrange,
+          ),
+      itemSize: 30,
+      updateOnDrag: true,
+      glowColor: Colors.deepOrange,
+      onRatingUpdate: (rating) {
+        setState(() {
+          this.rating = rating;
+          ratingstring = rating.toString();
+        });
       });
-    }
-  );
 
-  submitRating(){
+  submitRating() {
     var submitRating = {
       'email': email,
       'firstName': firstName,
@@ -203,32 +215,28 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
       'sdchosenserviceid': sdchosenserviceid,
       'sdchosenservicename': sdchosenservicename,
       'datetime': datetime,
-      'date' : date,
-      'rating' : ratingstring
+      'date': date,
+      'rating': ratingstring
     };
 
     //Update on Firestore Consumer to rated
     FirebaseFirestore.instance
-    .collection('Users')
-    .doc(userid)
-    .collection('Booking History')
-    .doc(docid)
-    .update({
-      'rated': true
-    });
-    
+        .collection('Users')
+        .doc(userid)
+        .collection('Booking History')
+        .doc(docid)
+        .update({'rated': true});
 
     //Submit on Firestore Business
     final firestorebusiness = FirebaseFirestore.instance
         .collection('BusinessList')
         .doc(sdchosenbusinessid);
-    
-    CollectionReference ratingcollection = firestorebusiness.collection('Ratings');
+
+    CollectionReference ratingcollection =
+        firestorebusiness.collection('Ratings');
     ratingcollection
-    .doc(docid)
-    .set(submitRating)
-    .then((value) => {
-      showThankYouDialog()
-    });
+        .doc(docid)
+        .set(submitRating)
+        .then((value) => {showThankYouDialog()});
   }
 }
