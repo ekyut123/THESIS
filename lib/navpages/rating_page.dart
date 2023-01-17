@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '/data_source/read_DB.dart';
 import 'package:flutter_firebase_users/model/rating_model.dart';
 import 'package:flutter_firebase_users/widgets/app_semi_large_text.dart';
+
+import 'booking_history.dart';
 
 class RatingPage extends StatefulWidget {
   final String businessid;
@@ -21,7 +24,6 @@ class _RatingPageState extends State<RatingPage> {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
-            print(snapshot.error);
             return const Center(child: Text('some error occured'));
           }
           if (snapshot.hasData) {
@@ -54,13 +56,20 @@ class _RatingPageState extends State<RatingPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                  '${ratingcollection[index].firstName} ${ratingcollection[index].lastName}',
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 20)),
-                              Text(
-                                'Rating: ${ratingcollection[index].rating}',
+                                '${ratingcollection[index].firstName} ${ratingcollection[index].lastName}',
                                 style: const TextStyle(
                                     color: Colors.black, fontSize: 20),
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Rating: ${ratingcollection[index].rating}',
+                                    style: const TextStyle(
+                                        color: Colors.black, fontSize: 20),
+                                  ),
+                                  const Icon(Icons.star,
+                                      color: Colors.deepOrange),
+                                ],
                               ),
                             ],
                           ),
