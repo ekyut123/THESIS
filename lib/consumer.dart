@@ -1,4 +1,5 @@
-import 'package:anim_search_bar/anim_search_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_users/navpages/healthcare_list.dart';
 import 'package:flutter_firebase_users/navpages/personalcare_list.dart';
@@ -24,7 +25,6 @@ late String phoneNumber;
 
 class _ConsumerPageState extends State<ConsumerPage>
     with TickerProviderStateMixin {
-  
   Future<DocumentSnapshot<Map<String, dynamic>>> getUser() async {
     User? user = _auth.currentUser!;
     return await FirebaseFirestore.instance
@@ -32,7 +32,7 @@ class _ConsumerPageState extends State<ConsumerPage>
         .doc(user.uid)
         .get();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     TabController tabController = TabController(length: 2, vsync: this);
@@ -51,20 +51,6 @@ class _ConsumerPageState extends State<ConsumerPage>
                 },
                 icon: const Icon(Icons.search))
           ],
-          //SearchButton
-          // elevation: 0,
-          // actions: [
-          //   AnimSearchBar(
-          //     width: 250,
-          //     textController: textController,
-          //     onSuffixTap: () {
-          //       setState(() {
-          //         textController.clear();
-          //       });
-          //     },
-          //     color: Colors.deepOrange[200]!,
-          //   ),
-          // ],
         ),
         body: SingleChildScrollView(
           child: Column(
