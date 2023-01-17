@@ -37,13 +37,15 @@ class _RatingPageState extends State<RatingPage> {
                       padding: const EdgeInsets.all(1.0),
                       child: SizedBox(
                         width: 150,
-                        height: 150,
+                        height: 90,
                         child: Card(
                           shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(4.0)),
-                              side: BorderSide(
-                                  color: Colors.deepOrange, width: 3)),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(4.0),
+                            ),
+                            side:
+                                BorderSide(color: Colors.deepOrange, width: 3),
+                          ),
                           color: Colors.white70,
                           child: ListTile(
                             title: AppSemiLargeText(
@@ -51,7 +53,7 @@ class _RatingPageState extends State<RatingPage> {
                                 text: ratingcollection[index]
                                     .sdchosenservicename),
                             subtitle: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
