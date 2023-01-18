@@ -6,6 +6,9 @@ import '../../navpages/contact-us_page.dart';
 import '../../navpages/termsandconditions_page.dart';
 import 'package:intl/intl.dart';
 
+import '../messages.dart';
+import '../payment_history.dart';
+
 final FirebaseAuth _auth = FirebaseAuth.instance;
 String email = "";
 String firstName = "";
@@ -44,7 +47,7 @@ class AdminDrawer extends StatelessWidget {
             //home
             buildMenuItem(
                 text: 'Home',
-                icon: Icons.article_outlined,
+                icon: Icons.home,
                 onClicked: (() {
                   Navigator.push(
                       context,
@@ -62,6 +65,30 @@ class AdminDrawer extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (BuildContext context) => SummaryReport(
                           datetoday: date,
+                        ),
+                      ));
+                })),
+            const SizedBox(height: 10.0),
+            buildMenuItem(
+                text: 'Messages',
+                icon: Icons.notifications_active,
+                onClicked: (() {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => const MessagesWidget(
+                        ),
+                      ));
+                })),
+            const SizedBox(height: 10.0),
+            buildMenuItem(
+                text: 'Payment History',
+                icon: Icons.payment,
+                onClicked: (() {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => const PaymentHistoryPage(
                         ),
                       ));
                 })),
