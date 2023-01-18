@@ -74,7 +74,7 @@ class _MessagesWidgetState extends State<MessagesWidget> {
           final notif = snapshot.data;
             return Scaffold(
             appBar: AppBar(
-              title: const Text("Notifications"),
+              title: const Text("Messages"),
             ),
             body: ListView.builder(
               itemCount: notif!.length,
