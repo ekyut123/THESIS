@@ -27,7 +27,13 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
   PlatformFile? pickedFile;
 
   Future selectFile() async {
-    final result = await FilePicker.platform.pickFiles();
+    final result = await FilePicker.platform
+        .pickFiles(type: FileType.custom, allowedExtensions: [
+      'jpg',
+      'jpeg',
+      'png',
+      'jfif',
+    ]);
     if (result == null) return;
     setState(() {
       pickedFile = result.files.first;
