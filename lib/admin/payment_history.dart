@@ -83,14 +83,16 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
     }
 
     return Scaffold(
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            selectFile();
-          },
-          label: const Text('Submit Receipt'),
-          icon: const Icon(Icons.file_upload),
-          backgroundColor: Colors.deepOrange,
-        ),
+        floatingActionButton: pickedFile == null
+            ? FloatingActionButton.extended(
+                onPressed: () {
+                  selectFile();
+                },
+                label: const Text('Submit Receipt'),
+                icon: const Icon(Icons.file_upload),
+                backgroundColor: Colors.deepOrange,
+              )
+            : null,
         appBar: AppBar(
           title: const Text('Payment History'),
           actions: [
