@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_users/admin/messages.dart';
 import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
@@ -93,6 +92,32 @@ class ConfirmReceipt extends StatelessWidget {
                     TextButton(
                         onPressed: () {
                           uploadFile();
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                      'Receipt has been sent to the SRVCS Team',
+                                      style:
+                                          TextStyle(color: Colors.deepOrange)),
+                                  content: const Text(
+                                      'Please wait 3-5 days to confirm your payment'),
+                                  actions: [
+                                    TextButton(
+                                        style: TextButton.styleFrom(
+                                          backgroundColor: Colors.deepOrange,
+                                        ),
+                                        child: const Text(
+                                          "Exit",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).popAndPushNamed(
+                                              '/paymenthistory');
+                                        })
+                                  ],
+                                );
+                              });
                         },
                         child: const Text("Send",
                             style: TextStyle(color: Colors.green)))
