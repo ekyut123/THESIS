@@ -11,9 +11,9 @@ class BusinessInfo {
   final String closingday;
   final String closinghour;
   final String businessaddress;
-  // final CategoryInfo category;
+  final bool hasGCash;
 
-  const BusinessInfo(
+  BusinessInfo(
       {required this.businessid,
       required this.businessName,
       required this.businessDescription,
@@ -23,7 +23,9 @@ class BusinessInfo {
       required this.openinghour,
       required this.closingday,
       required this.closinghour,
-      required this.businessaddress});
+      required this.businessaddress,
+      required this.hasGCash,
+    });
 
   factory BusinessInfo.fromSnapshot(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
@@ -38,7 +40,9 @@ class BusinessInfo {
         openinghour: snapshot['opening hour'],
         closingday: snapshot['closing day'],
         closinghour: snapshot['closing hour'],
-        businessaddress: snapshot['business address']);
+        businessaddress: snapshot['business address'],
+        hasGCash: snapshot['hasGCash'],
+      );
   }
 
   Map<String, dynamic> toJson() => {
@@ -51,6 +55,7 @@ class BusinessInfo {
         "opening hour": openinghour,
         "closing day": closingday,
         "closing hour": closinghour,
-        "business address": businessaddress
+        "business address": businessaddress,
+        "hasGCash": hasGCash
       };
 }
