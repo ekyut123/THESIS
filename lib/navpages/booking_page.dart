@@ -44,6 +44,11 @@ class BookingPage extends StatefulWidget {
   String serviceid = "";
   String businessName = "";
   late String datetime;
+  
+  late bool hasGCash;
+  String? selecteditem = 'On Site Payment';
+  late String gcash;
+  late String gcashnum;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String email = "";
@@ -171,9 +176,10 @@ class _BookingPageState extends State<BookingPage> {
                     }
                   ),
                   const SizedBox(height: 10),
+                  //service
                   Container(
                     color: Colors.white70,
-                    height: 40,
+                    height: 30,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -186,7 +192,6 @@ class _BookingPageState extends State<BookingPage> {
                               'Service: ${categoryName}',
                               textAlign: TextAlign.center,
                             ),
-                            const SizedBox(height: 5)
                           ],
                         ),
                       ],
@@ -198,7 +203,8 @@ class _BookingPageState extends State<BookingPage> {
                       textAlign: TextAlign.left,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
+                  //date & time
                   Container(
                     color: Colors.white70,
                     height: 40,
@@ -221,7 +227,34 @@ class _BookingPageState extends State<BookingPage> {
                         ),
                       ],
                     ),
-                  )
+                  ),
+                  const SizedBox(height: 10),
+                  //payment method
+                  Container(
+                    color: Colors.white70,
+                    height: 50,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Icon(Icons.payment),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Mode of Payment: ',
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              '$selecteditem',
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ]),
                 actions: <Widget>[
                   TextButton(
@@ -244,9 +277,15 @@ class _BookingPageState extends State<BookingPage> {
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () {
-                        confirmBooking();
-                        updatecounter();
-                        Navigator.of(context).pop();
+                        if(selecteditem == "GCash"){
+                          Navigator.of(context).pop();
+                          _showGCashNum();
+                        }
+                        else{
+                          confirmBooking();
+                          updatecounter();
+                          Navigator.of(context).pop();
+                        }
                       }),
                 ],
               );
@@ -285,6 +324,229 @@ class _BookingPageState extends State<BookingPage> {
         });
   }
   
+  void _showGCashPayment(){
+
+    List <String> pmethod = ['On Site Payment', 'GCash'];
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Select Payment Method',
+            style: TextStyle(color: Colors.deepOrange),
+          ),
+          content: DropdownButtonFormField<String>(
+            decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              )
+            ),
+            value: selecteditem,
+            items: pmethod
+            .map((pmethod) => DropdownMenuItem<String>(
+              value: pmethod,
+              child: Text(pmethod, style: const TextStyle(fontSize: 20)),
+            )).toList(),
+            onChanged: (pmethod) => setState(() => selecteditem = pmethod),
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.deepOrange,
+              ),
+              child: const Text(
+              "Exit",
+              style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(BookingPage);                
+              }),
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.deepOrange,
+              ),
+              child: const Text(
+              "Select",
+              style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _showBookingInfo();
+                
+              }),
+            ],
+          );
+        });
+  }
+  
+  void _showOnSitePayment(){
+
+    List <String> pmethod = ['On Site Payment'];
+    String? selecteditem = 'On Site Payment';
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Select Payment Method',
+            style: TextStyle(color: Colors.deepOrange),
+          ),
+          content: DropdownButtonFormField<String>(
+            decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              )
+            ),
+            value: selecteditem,
+            items: pmethod
+            .map((pmethod) => DropdownMenuItem<String>(
+              value: pmethod,
+              child: Text(pmethod, style: const TextStyle(fontSize: 20)),
+            )).toList(),
+            onChanged: (pmethod) => setState(() => selecteditem = pmethod),
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.deepOrange,
+              ),
+              child: const Text(
+              "Exit",
+              style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(BookingPage);                
+              }),
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.deepOrange,
+              ),
+              child: const Text(
+              "Select",
+              style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();   
+                _showBookingInfo();             
+              }),
+            ],
+          );
+        });
+  }
+  
+  void _showGCashQR(){
+    CollectionReference qr = FirebaseFirestore.instance.collection('BusinessList');
+    showDialog(
+      context: context,
+      builder: (BuildContext context){
+        return FutureBuilder(
+          future: qr.doc(businessid).get(),
+          builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
+            if(snapshot.hasData){
+              Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+              gcash = data['gcash'];
+
+              return AlertDialog(
+                title: const Text('QR Code',
+                  style: TextStyle(color: Colors.deepOrange)
+                  ),
+                content: Image.network(gcash),
+                actions: [
+                  TextButton(style: TextButton.styleFrom(
+                    backgroundColor: Colors.deepOrange,
+                  ),
+                  child: const Text(
+                    "Back",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      _showGCashNum();
+                    }
+                  ),
+                  
+                ],
+              );
+            }
+            return const Center(child: CircularProgressIndicator());
+          },
+        );
+      }
+    );
+  }
+  
+  void _showGCashNum(){
+    CollectionReference qr = FirebaseFirestore.instance.collection('BusinessList');
+    showDialog(
+      context: context,
+      builder: (BuildContext context){
+        return FutureBuilder(
+          future: qr.doc(businessid).get(),
+          builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
+            if(snapshot.hasData){
+              Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+              gcashnum = data['gcashnumber'];
+
+              return AlertDialog(
+                title: const Text('Pay to this GCash number & save the receipt',
+                  style: TextStyle(color: Colors.deepOrange)
+                  ),
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('GCash Number: '),
+                    Text('$gcashnum')
+                  ],
+                ),
+                actions: [
+                  TextButton(style: TextButton.styleFrom(
+                    backgroundColor: Colors.deepOrange,
+                  ),
+                  child: const Text(
+                    "Back",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      _showBookingInfo();
+                    }
+                  ),
+                  TextButton(style: TextButton.styleFrom(
+                    backgroundColor: Colors.deepOrange,
+                  ),
+                  child: const Text(
+                    "QR Code",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      _showGCashQR();
+                    }
+                  ),
+                  TextButton(style: TextButton.styleFrom(
+                    backgroundColor: Colors.deepOrange,
+                  ),
+                  child: const Text(
+                    "Done",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      //code for receipt here
+                    }
+                  )
+                ],
+              );
+            }
+            return const Center(child: CircularProgressIndicator());
+          },
+        );
+      }
+    );
+  }
+  
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -313,6 +575,7 @@ class _BookingPageState extends State<BookingPage> {
                   future: readbusinessinfo(businessid),
                   builder: (context, snapshot) {
                     if(snapshot.hasData){
+                      hasGCash = snapshot.data!['hasGCash'];
                       return Scaffold(
                       floatingActionButton: FloatingActionButton.extended(
                         onPressed: selectedtime == '' ? null : () {
@@ -332,10 +595,10 @@ class _BookingPageState extends State<BookingPage> {
                         child:
                           Column(crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                height: MediaQuery.of(context).size.height * 0.2,
-                                decoration: BoxDecoration(color: Colors.grey[100]),
-                              ),
+                              // Container(
+                              //   height: MediaQuery.of(context).size.height * 0.2,
+                              //   decoration: BoxDecoration(color: Colors.grey[100]),
+                              // ),
                               //service name & price
                               Row(
                                 children: [
@@ -789,7 +1052,12 @@ class _BookingPageState extends State<BookingPage> {
       if (documentSnapshot.exists) {
         _showTakenDialog();
       }else{
-        _showBookingInfo();
+        if(hasGCash == true){
+          _showGCashPayment();
+        }
+        if(hasGCash == false){
+          _showOnSitePayment();
+        }
       }
     });
   }
@@ -813,7 +1081,8 @@ class _BookingPageState extends State<BookingPage> {
       'consumeremail': email,
       'consumerfirstname': firstName,
       'consumerlastname': lastName,
-      'consumerphonenum': phoneNumber
+      'consumerphonenum': phoneNumber,
+      'paymentmethod': selectedtime
     };
 
     //consumer
@@ -827,7 +1096,8 @@ class _BookingPageState extends State<BookingPage> {
       'slot': intslot,
       'timeStamp': timeStamp,
       'datetime': datetime,
-      'date' : _d1
+      'date' : _d1,
+
     };
 
     var setDate = {
