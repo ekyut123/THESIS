@@ -75,8 +75,15 @@ class ConfirmReceipt extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
           child: Column(
             children: [
+              Container(
+                alignment: Alignment.center,
+                child: Image.file(
+                  File(filepath),
+                  height: MediaQuery.of(context).size.height * 0.7,
+                ),
+              ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -122,13 +129,6 @@ class ConfirmReceipt extends StatelessWidget {
                         child: const Text("Send",
                             style: TextStyle(color: Colors.green)))
                   ],
-                ),
-              ),
-              Container(
-                alignment: Alignment.center,
-                child: Image.file(
-                  File(filepath),
-                  height: MediaQuery.of(context).size.height * 0.7,
                 ),
               ),
             ],
