@@ -79,7 +79,9 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
       String sdchosenservicename,
       String timeslot,
       int slot,
-      int timestamp) async {
+      int timestamp,
+      String modeofpayment,
+      String receipt) async {
     bool rated = false;
     final docBookingHistory = FirebaseFirestore.instance
         .collection('Users')
@@ -87,6 +89,8 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
         .collection('Booking History')
         .doc();
     final bookinghistoryjson = {
+      'modeofpayment': modeofpayment,
+      'receipt': receipt,
       'date': date,
       'datetime': datetime,
       'sdchosenbusinessid': sdchosenbusinessid,
@@ -117,13 +121,17 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
       String sdchosenservicename,
       String timeslot,
       int slot,
-      int timestamp) async {
+      int timestamp,
+      String modeofpayment,
+      String receipt) async {
     final docCancel = FirebaseFirestore.instance
         .collection('BusinessList')
         .doc(user!.uid)
         .collection('Cancelled')
         .doc();
     final canceljson = {
+      'modeofpayment': modeofpayment,
+      'receipt': receipt,
       'date': date,
       'consumeremail': email,
       'consumerfirstname': fname,
@@ -158,13 +166,17 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
       String sdchosenservicename,
       String timeslot,
       int slot,
-      int timestamp) async {
+      int timestamp,
+      String modeofpayment,
+      String receipt) async {
     final docAcc = FirebaseFirestore.instance
         .collection('BusinessList')
         .doc(user!.uid)
         .collection('Accomplished')
         .doc();
     final accjson = {
+      'modeofpayment': modeofpayment,
+      'receipt': receipt,
       'date': date,
       'consumeremail': email,
       'consumerfirstname': fname,
@@ -259,6 +271,66 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
                                                         'Phone Number: ',
                                                         slot[index]
                                                             .consumerphonenum),
+                                                    bookingtile(
+                                                        'Mode of Payment',
+                                                        slot[index]
+                                                            .modeofpayment
+                                                            .toUpperCase()),
+                                                    slot[index].modeofpayment ==
+                                                            'gcash'
+                                                        ? GestureDetector(
+                                                            onTap: () {
+                                                              showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (context) {
+                                                                  return AlertDialog(
+                                                                    title: const Text(
+                                                                        'GCash Receipt'),
+                                                                    content: Image.network(
+                                                                        slot[index]
+                                                                            .receipt),
+                                                                    actions: [
+                                                                      TextButton(
+                                                                          onPressed:
+                                                                              () {
+                                                                            Navigator.of(context).pop();
+                                                                          },
+                                                                          child:
+                                                                              const Text("Back"))
+                                                                    ],
+                                                                  );
+                                                                },
+                                                              );
+                                                            },
+                                                            child: ListTile(
+                                                              title: Column(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: const [
+                                                                    Text(
+                                                                      'Receipt : ',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                    ),
+                                                                    Text(
+                                                                      'Click Here',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Colors
+                                                                            .blue,
+                                                                      ),
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                    )
+                                                                  ]),
+                                                            ),
+                                                          )
+                                                        : Container(),
                                                   ],
                                                 ),
                                               ),
@@ -324,7 +396,9 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
                                                                             slot[index].sdchosenservicename,
                                                                             slot[index].timeslot,
                                                                             slot[index].slot,
-                                                                            slot[index].timeStamp);
+                                                                            slot[index].timeStamp,
+                                                                            slot[index].modeofpayment,
+                                                                            slot[index].receipt);
                                                                         await deleteActiveBooking(
                                                                             slot[index].consumerid,
                                                                             slot[index].datetime);
@@ -403,7 +477,9 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
                                                                             slot[index].sdchosenservicename,
                                                                             slot[index].timeslot,
                                                                             slot[index].slot,
-                                                                            slot[index].timeStamp);
+                                                                            slot[index].timeStamp,
+                                                                            slot[index].modeofpayment,
+                                                                            slot[index].receipt);
                                                                         await storeBookingHistory(
                                                                             date,
                                                                             slot[index].consumerid,
@@ -414,7 +490,9 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
                                                                             slot[index].sdchosenservicename,
                                                                             slot[index].timeslot,
                                                                             slot[index].slot,
-                                                                            slot[index].timeStamp);
+                                                                            slot[index].timeStamp,
+                                                                            slot[index].modeofpayment,
+                                                                            slot[index].receipt);
                                                                         await deleteActiveBooking(
                                                                             slot[index].consumerid,
                                                                             slot[index].datetime);
@@ -464,7 +542,7 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
                                             title: Text(slot[index]
                                                 .sdchosenservicename),
                                             subtitle: Text(
-                                                '${slot[index].datetime} | ${slot[index].consumerfirstname} ${slot[index].consumerlastname}'),
+                                                '${slot[index].datetime} | ${slot[index].consumerfirstname} ${slot[index].consumerlastname}\nMode of Payment: ${slot[index].modeofpayment.toUpperCase()}'),
                                           ),
                                         ),
                                       ),
@@ -473,9 +551,9 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
                                 });
                           }
                         } else if (snapshot.hasError) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text("An Error Has Occured")));
+                          const Center(
+                            child: Text("An Error Has Occured"),
+                          );
                         }
                         return const Center(child: CircularProgressIndicator());
                       },
