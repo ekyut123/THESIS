@@ -67,8 +67,15 @@ class _RatingPageState extends State<RatingPage> {
                                     style: const TextStyle(
                                         color: Colors.black, fontSize: 20),
                                   ),
-                                  const Icon(Icons.star,
-                                      color: Colors.deepOrange),
+                                  // //dito papasok yung rating
+                                  // RatingBar.builder(
+                                  //     itemBuilder: (context, _) => const Icon(
+                                  //         Icons.star,
+                                  //         color: Colors.deepOrange),
+                                  //     itemSize: 25,
+                                  //     onRatingUpdate: (rating) => setState(() {
+                                  //           // this.rating = rating;
+                                  //         }))
                                 ],
                               ),
                             ],
