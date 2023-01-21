@@ -11,6 +11,8 @@ class ActiveBooking {
   final int timeStamp;
   final String datetime;
   final String date;
+  final String modeofpayment;
+  final String receipt;
 
   const ActiveBooking({
     required this.businessid,
@@ -22,7 +24,9 @@ class ActiveBooking {
     required this.slot,
     required this.timeStamp,
     required this.datetime,
-    required this.date
+    required this.date,
+    required this.modeofpayment,
+    required this.receipt
   });
 
   factory ActiveBooking.fromSnapshot(DocumentSnapshot snap) {
@@ -38,7 +42,9 @@ class ActiveBooking {
       timeslot: snapshot['timeslot'],
       datetime: snapshot['datetime'],
       slot: snapshot['slot'],
-      date: snapshot['date']
+      date: snapshot['date'],
+      modeofpayment: snapshot['modeofpayment'],
+      receipt: snapshot['receipt']
     );
   }
 
@@ -52,6 +58,8 @@ class ActiveBooking {
     "timeslot": timeslot,
     "timeStamp": timeStamp,
     "datetime" : datetime,
-    "date" : date
+    "date" : date,
+    "modeofpayment": modeofpayment,
+    "receipt": receipt
   };
 }
