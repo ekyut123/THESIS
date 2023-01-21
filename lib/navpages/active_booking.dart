@@ -16,6 +16,7 @@ class ActiveBookingPage extends StatefulWidget {
 }
 
 final String userid = FirebaseAuth.instance.currentUser!.uid;
+
 //service booking info
 String datetime = "";
 String olddatetime = "";
@@ -29,6 +30,7 @@ String olddate = "";
 int intslot = 0;
 String slot = "";
 String oldslot = "";
+late String modeofpayment;
 
 class _ActiveBookingPageState extends State<ActiveBookingPage> {
 
@@ -186,6 +188,7 @@ class _ActiveBookingPageState extends State<ActiveBookingPage> {
             future: readactivebookinginfo(userid, datetime),
             builder: (context, snapshot){
               if(snapshot.hasData){
+                modeofpayment = snapshot.data!['modeofpayment'];
                 datetime = snapshot.data!['datetime'];
                 sdchosenbusinessid = snapshot.data!['sdchosenbusinessid'];
                 sdchosenbusinessname = snapshot.data!['sdchosenbusinessname'];
@@ -196,7 +199,8 @@ class _ActiveBookingPageState extends State<ActiveBookingPage> {
                 intslot = snapshot.data!['slot'];
                 slot = intslot.toString();
 
-                return AlertDialog(
+                if(modeofpayment == 'gcash'){
+                  return AlertDialog(
                   title: AppLargeText(text: 'Booking Details:'.toUpperCase()),
                   content: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -252,6 +256,140 @@ class _ActiveBookingPageState extends State<ActiveBookingPage> {
                       Center(
                         child: Text(datetime, textAlign: TextAlign.center),
                       ),
+                      const SizedBox(height: 20),
+                      //modeofpayment
+                      Container(
+                        color: Colors.white70,
+                        height: 30,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: const [
+                            Icon(Icons.payment),
+                            SizedBox(width: 5),
+                            Text(
+                              'Mode of Payment: ',
+                              textAlign: TextAlign.left,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Center(
+                        child: Text(modeofpayment.toUpperCase(), textAlign: TextAlign.center),
+                      ),
+                    ]
+                  ),
+                  actions: [
+                    //exit
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.deepOrange,
+                      ),
+                      child: const Text(
+                        "Exit",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop(ActiveBookingPage);
+                      }
+                    ),
+                    //resched
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.deepOrange,
+                      ),
+                      child: const Text(
+                        "Reschedule",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        olddate = date;
+                        olddatetime = datetime;
+                        oldslot = slot;
+                        Navigator.of(context).pop();
+                        showReschedDialog();
+                      }
+                    ),
+                  ],
+                );
+                }else{
+                  return AlertDialog(
+                  title: AppLargeText(text: 'Booking Details:'.toUpperCase()),
+                  content: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AppLargeText(text: sdchosenbusinessname),
+                      //business address
+                      FutureBuilder(
+                        future: readbusinessinfo(sdchosenbusinessid),
+                        builder: (context, snapshot) {
+                          if(snapshot.hasData){
+                            return Text(snapshot.data!['business address']);
+                          }
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                      ),
+                      const SizedBox(height: 10),
+                      //service name
+                      Container(
+                        color: Colors.white70,
+                        height: 30,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: const [
+                            Icon(Icons.bookmark_add),
+                            SizedBox(width: 5),
+                            Text('Service: ', textAlign: TextAlign.center),
+                          ],
+                        ),
+                      ),
+                      Center(
+                        child: Text(sdchosenservicename, textAlign: TextAlign.left),
+                      ),
+                      const SizedBox(height: 20),
+                      //date time
+                      Container(
+                        color: Colors.white70,
+                        height: 30,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: const [
+                            Icon(Icons.calendar_today),
+                            SizedBox(width: 5),
+                            Text(
+                              'Date & Time: ',
+                              textAlign: TextAlign.left,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Center(
+                        child: Text(datetime, textAlign: TextAlign.center),
+                      ),
+                      const SizedBox(height: 20),
+                      //modeofpayment
+                      Container(
+                        color: Colors.white70,
+                        height: 30,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: const [
+                            Icon(Icons.payment),
+                            SizedBox(width: 5),
+                            Text(
+                              'Mode of Payment: ',
+                              textAlign: TextAlign.left,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Center(
+                        child: Text(modeofpayment.toUpperCase(), textAlign: TextAlign.center),
+                      ),
                     ]
                   ),
                   actions: [
@@ -301,6 +439,7 @@ class _ActiveBookingPageState extends State<ActiveBookingPage> {
                     ),
                   ],
                 );
+                }
               }
               return const Center(child: CircularProgressIndicator());
             }
