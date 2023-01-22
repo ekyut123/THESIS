@@ -823,18 +823,18 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
               ),
             ],
           ),
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed: () async {
-              _signOut();
-            },
-            label: const Text(
-              'Logout',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, fontFamily: 'Montserrat'),
-            ),
-            icon: const Icon(Icons.logout),
-            backgroundColor: Colors.deepOrange,
-          ),
+          // floatingActionButton: FloatingActionButton.extended(
+          //   onPressed: () async {
+          //     _signOut();
+          //   },
+          //   label: const Text(
+          //     'Logout',
+          //     style: TextStyle(
+          //         fontWeight: FontWeight.bold, fontFamily: 'Montserrat'),
+          //   ),
+          //   icon: const Icon(Icons.logout),
+          //   backgroundColor: Colors.deepOrange,
+          // ),
         ));
   }
 }
