@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_users/data_source/read_DB.dart';
 import 'package:flutter_firebase_users/navpages/termsandconditions_page.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -77,11 +78,73 @@ class _SignupPageState extends State<SignupPage> {
       'role': role,
     };
     await docUser.set(json);
-    setState(() {
-      loading = false;
-    });
+
+    QuerySnapshot snap =
+        await FirebaseFirestore.instance.collection('BusinessList').get();
+
+    for (var document in snap.docs) {
+      saveJson(
+          user.uid,
+          document["businessid"],
+          document["business address"],
+          document["businessDescription"],
+          document["businessEmail"],
+          document["businessImage"],
+          document["businessName"],
+          document["businessPhone"],
+          document["businessType"],
+          document["closing day"],
+          document["closing hour"],
+          document["opening day"],
+          document["opening hour"],
+          document["personalEmail"],
+          document["personalPhone"]);
+    }
     if (!mounted) return;
     Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
+  }
+
+  Future<void> saveJson(
+    String uid,
+    String businessId,
+    String add,
+    String desc,
+    String bemail,
+    String image,
+    String name,
+    String phone,
+    String type,
+    String cday,
+    String chour,
+    String oday,
+    String ohour,
+    String pemail,
+    String pphone,
+  ) async {
+    int counter = 0;
+    final docCounter = FirebaseFirestore.instance
+        .collection('Users')
+        .doc(uid)
+        .collection('Booked Counter')
+        .doc(businessId);
+    final json = {
+      'businessid': businessId,
+      'counter': counter,
+      'business address': add,
+      'businessDescription': desc,
+      'businessEmail': bemail,
+      'businessImage': image,
+      'businessName': name,
+      'businessPhone': phone,
+      'businessType': type,
+      'closing day': cday,
+      'closing hour': chour,
+      'opening day': oday,
+      'opening hour': ohour,
+      'personalEmail': pemail,
+      'personalPhone': pphone
+    };
+    await docCounter.set(json);
   }
 
   void _register(String phonecontroller, BuildContext context) async {
@@ -184,7 +247,9 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return loading
-        ? const Loading()
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
         : Scaffold(
             body: Scrollbar(
             thumbVisibility: true,
