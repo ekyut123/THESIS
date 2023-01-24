@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 
 import '../messages.dart';
 import '../payment_history.dart';
+import '../payment_page.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 String email = "";
@@ -82,13 +83,13 @@ class AdminDrawer extends StatelessWidget {
                 })),
             const SizedBox(height: 10.0),
             buildMenuItem(
-                text: 'Payment History',
+                text: 'Payments',
                 icon: Icons.payment,
                 onClicked: (() {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => const PaymentHistoryPage(
+                        builder: (BuildContext context) => const PaymentPage(
                         ),
                       ));
                 })),
