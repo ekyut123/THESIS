@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_users/admin/payment_history.dart';
 import 'package:flutter_firebase_users/consumer.dart';
 import 'package:flutter_firebase_users/main.dart';
 import 'package:flutter_firebase_users/navpages/active_booking.dart';
@@ -24,6 +25,8 @@ class ReschedulePage extends StatefulWidget {
   late int intdy;
   late int intmonth;
   late int intyr;
+  final String receipt;
+  final String modeofpayment;
 
   ReschedulePage(
       {super.key,
@@ -35,6 +38,8 @@ class ReschedulePage extends StatefulWidget {
       required this.olddatetime,
       required this.oldslot,
       required this.olddate,
+      required this.receipt,
+      required this.modeofpayment,
     });
 
   @override
@@ -87,6 +92,8 @@ class _ReschedulePageState extends State<ReschedulePage> {
   late var month = '';
   late var dy = '';
   late var yr = '';
+
+  late String type;
 
   //for time
   late var selectedtime = '';
@@ -325,6 +332,7 @@ class _ReschedulePageState extends State<ReschedulePage> {
                   future: readbusinessinfo(businessid),
                   builder: (context, snapshot) {
                     if(snapshot.hasData){
+                      type = snapshot.data!['businessType'];
                       return Scaffold(
                       floatingActionButton: FloatingActionButton.extended(
                         onPressed: selectedtime == '' ? null : () {
@@ -474,13 +482,20 @@ class _ReschedulePageState extends State<ReschedulePage> {
     int inttemp2 = int.parse(temp2);
     int inttemp3 = int.parse(temp3);
 
+    dynamic timeSlot;
+    if(type == 'Personal Care'){
+      timeSlot = timeSlot1;
+    }
+    if(type == 'Health Care'){
+      timeSlot = timeSlot2;
+    }
     //if last year nagbook, unavailable
     if(year < inttemp3){
       return Container(
-        height: MediaQuery.of(context).size.height * .8,
+        height: MediaQuery.of(context).size.height * .4,
         child: Expanded(
           child: GridView.builder(
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: timeSlot.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 4
@@ -511,7 +526,7 @@ class _ReschedulePageState extends State<ReschedulePage> {
       //pero last month nagbook, unavailable
       if (month < inttemp2) {
         return Container(
-          height: MediaQuery.of(context).size.height * .8,
+          height: MediaQuery.of(context).size.height * .4,
           child: Expanded(
             child: GridView.builder(
               itemCount: timeSlot.length,
@@ -541,7 +556,7 @@ class _ReschedulePageState extends State<ReschedulePage> {
         //pero kahapon, unavailable
         if (day < inttemp1) {
           return Container(
-            height: MediaQuery.of(context).size.height * .8,
+            height: MediaQuery.of(context).size.height * .4,
             child: Expanded(
               child: GridView.builder(
                 itemCount: timeSlot.length,
@@ -571,7 +586,7 @@ class _ReschedulePageState extends State<ReschedulePage> {
         //this day forward, available
         else{
           return Container(
-            height: MediaQuery.of(context).size.height * .8,
+            height: MediaQuery.of(context).size.height * .4,
             child: StreamBuilder<List<BookingInfo>>(
               stream: ReadDataBase.readtimeslot(
                 businessid, clickeddate),
@@ -643,7 +658,7 @@ class _ReschedulePageState extends State<ReschedulePage> {
       // this month forward, available
       else{
         return Container(
-          height: MediaQuery.of(context).size.height * .8,
+          height: MediaQuery.of(context).size.height * .4,
           child: StreamBuilder<List<BookingInfo>>(
             stream: ReadDataBase.readtimeslot(
               businessid, clickeddate),
@@ -714,7 +729,7 @@ class _ReschedulePageState extends State<ReschedulePage> {
     }
     if(year > inttemp3){
       return Container(
-        height: MediaQuery.of(context).size.height * .8,
+        height: MediaQuery.of(context).size.height * .4,
         child: StreamBuilder<List<BookingInfo>>(
           stream: ReadDataBase.readtimeslot(
             businessid, clickeddate),
@@ -826,7 +841,9 @@ class _ReschedulePageState extends State<ReschedulePage> {
       'consumeremail': email,
       'consumerfirstname': firstName,
       'consumerlastname': lastName,
-      'consumerphonenum': phoneNumber
+      'consumerphonenum': phoneNumber,
+      'modeofpayment': widget.modeofpayment,
+      'receipt': widget.receipt
     };
 
     //consumer
@@ -840,7 +857,9 @@ class _ReschedulePageState extends State<ReschedulePage> {
       'slot': intslot,
       'timeStamp': timeStamp,
       'datetime': datetime,
-      'date' : _d1
+      'date' : _d1,
+      'modeofpayment': widget.modeofpayment,
+      'receipt': widget.receipt
     };
 
     var setDate = {
@@ -868,7 +887,7 @@ class _ReschedulePageState extends State<ReschedulePage> {
         .doc(uid);
     CollectionReference userbookingcollection = firestoreconsumer.collection('Active Booking');
     userbookingcollection.doc(datetime)
-    .set(submitActiveBooking);
+    .set(submitActiveBooking, SetOptions(merge: true));
 
     //Delete on Consumers Firestore hindi
     FirebaseFirestore.instance
