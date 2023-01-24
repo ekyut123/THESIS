@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -48,6 +47,7 @@ String servicePrice = "";
 String serviceid = "";
 String businessName = "";
 late String datetime;
+late String type;
 
 late bool hasGCash;
 String? selecteditem = 'On Site Payment';
@@ -658,6 +658,7 @@ class _BookingPageState extends State<BookingPage> {
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             hasGCash = snapshot.data!['hasGCash'];
+                            type = snapshot.data!['businessType'];
                             return Scaffold(
                                 floatingActionButton:
                                     FloatingActionButton.extended(
@@ -838,14 +839,22 @@ class _BookingPageState extends State<BookingPage> {
     int inttemp2 = int.parse(temp2);
     int inttemp3 = int.parse(temp3);
 
+    dynamic timeSlot = {};
+
+    if(type == 'Personal Care'){
+      timeSlot = timeSlot1;
+    }
+    if(type == 'Health Care'){
+      timeSlot = timeSlot2;
+    }
     //if last year nagbook, unavailable
     if (year < inttemp3) {
       return Container(
-          height: MediaQuery.of(context).size.height * .8,
+          height: MediaQuery.of(context).size.height * .4,
           child: Expanded(
             child: GridView.builder(
               physics: NeverScrollableScrollPhysics(),
-              itemCount: timeSlot.length,
+              itemCount: timeSlot1.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 4),
               itemBuilder: (context, index) => Card(
@@ -856,7 +865,7 @@ class _BookingPageState extends State<BookingPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(timeSlot.elementAt(index),
+                      Text(timeSlot1.elementAt(index),
                           style: Theme.of(context).textTheme.overline),
                       Text('Unavailable',
                           style: Theme.of(context).textTheme.overline)
@@ -872,10 +881,10 @@ class _BookingPageState extends State<BookingPage> {
       //pero last month nagbook, unavailable
       if (month < inttemp2) {
         return Container(
-            height: MediaQuery.of(context).size.height * .8,
+            height: MediaQuery.of(context).size.height * .4,
             child: Expanded(
               child: GridView.builder(
-                itemCount: timeSlot.length,
+                itemCount: timeSlot1.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4),
                 itemBuilder: (context, index) => Card(
@@ -886,7 +895,7 @@ class _BookingPageState extends State<BookingPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(timeSlot.elementAt(index),
+                        Text(timeSlot1.elementAt(index),
                             style: Theme.of(context).textTheme.overline),
                         Text('Unavailable',
                             style: Theme.of(context).textTheme.overline)
@@ -902,10 +911,10 @@ class _BookingPageState extends State<BookingPage> {
         //pero kahapon, unavailable
         if (day < inttemp1) {
           return Container(
-              height: MediaQuery.of(context).size.height * .8,
+              height: MediaQuery.of(context).size.height * .4,
               child: Expanded(
                 child: GridView.builder(
-                  itemCount: timeSlot.length,
+                  itemCount: timeSlot1.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 4),
                   itemBuilder: (context, index) => Card(
@@ -916,7 +925,7 @@ class _BookingPageState extends State<BookingPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(timeSlot.elementAt(index),
+                          Text(timeSlot1.elementAt(index),
                               style: Theme.of(context).textTheme.overline),
                           Text('Unavailable',
                               style: Theme.of(context).textTheme.overline)
@@ -930,7 +939,7 @@ class _BookingPageState extends State<BookingPage> {
         //this day forward, available
         else {
           return Container(
-            height: MediaQuery.of(context).size.height * .8,
+            height: MediaQuery.of(context).size.height * .4,
             child: StreamBuilder<List<BookingInfo>>(
               stream: ReadDataBase.readtimeslot(businessid, clickeddate),
               builder: (context, snapshot) {
@@ -949,7 +958,7 @@ class _BookingPageState extends State<BookingPage> {
                   });
                   return Expanded(
                     child: GridView.builder(
-                        itemCount: timeSlot.length,
+                        itemCount: timeSlot1.length,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 4),
@@ -959,7 +968,7 @@ class _BookingPageState extends State<BookingPage> {
                                   : () {
                                       setState(() {
                                         selectedtime =
-                                            timeSlot.elementAt(index);
+                                            timeSlot1.elementAt(index);
                                         intslot = index;
                                         stringslot = intslot.toString();
                                         //hour
@@ -977,7 +986,7 @@ class _BookingPageState extends State<BookingPage> {
                               child: Card(
                                 color: timeslots.contains(index)
                                     ? Colors.white10
-                                    : selectedtime == timeSlot.elementAt(index)
+                                    : selectedtime == timeSlot1.elementAt(index)
                                         ? Colors.deepOrange
                                         : Colors.white,
                                 child: GridTile(
@@ -987,7 +996,7 @@ class _BookingPageState extends State<BookingPage> {
                                         CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text(timeSlot.elementAt(index),
+                                      Text(timeSlot1.elementAt(index),
                                           style: Theme.of(context)
                                               .textTheme
                                               .overline),
@@ -1014,7 +1023,7 @@ class _BookingPageState extends State<BookingPage> {
       // this month forward, available
       else {
         return Container(
-          height: MediaQuery.of(context).size.height * .8,
+          height: MediaQuery.of(context).size.height * .4,
           child: StreamBuilder<List<BookingInfo>>(
             stream: ReadDataBase.readtimeslot(businessid, clickeddate),
             builder: (context, snapshot) {
@@ -1033,7 +1042,7 @@ class _BookingPageState extends State<BookingPage> {
                 });
                 return Expanded(
                   child: GridView.builder(
-                      itemCount: timeSlot.length,
+                      itemCount: timeSlot1.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 4),
@@ -1042,7 +1051,7 @@ class _BookingPageState extends State<BookingPage> {
                                 ? null
                                 : () {
                                     setState(() {
-                                      selectedtime = timeSlot.elementAt(index);
+                                      selectedtime = timeSlot1.elementAt(index);
                                       intslot = index;
                                       stringslot = intslot.toString();
                                       //hour
@@ -1060,7 +1069,7 @@ class _BookingPageState extends State<BookingPage> {
                             child: Card(
                               color: timeslots.contains(index)
                                   ? Colors.white10
-                                  : selectedtime == timeSlot.elementAt(index)
+                                  : selectedtime == timeSlot1.elementAt(index)
                                       ? Colors.deepOrange
                                       : Colors.white,
                               child: GridTile(
@@ -1069,7 +1078,7 @@ class _BookingPageState extends State<BookingPage> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(timeSlot.elementAt(index),
+                                    Text(timeSlot1.elementAt(index),
                                         style: Theme.of(context)
                                             .textTheme
                                             .overline),
@@ -1095,7 +1104,7 @@ class _BookingPageState extends State<BookingPage> {
     }
     if (year > inttemp3) {
       return Container(
-        height: MediaQuery.of(context).size.height * .8,
+        height: MediaQuery.of(context).size.height * .4,
         child: StreamBuilder<List<BookingInfo>>(
           stream: ReadDataBase.readtimeslot(businessid, clickeddate),
           builder: (context, snapshot) {
@@ -1114,7 +1123,7 @@ class _BookingPageState extends State<BookingPage> {
               });
               return Expanded(
                 child: GridView.builder(
-                    itemCount: timeSlot.length,
+                    itemCount: timeSlot1.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 4),
@@ -1123,7 +1132,7 @@ class _BookingPageState extends State<BookingPage> {
                               ? null
                               : () {
                                   setState(() {
-                                    selectedtime = timeSlot.elementAt(index);
+                                    selectedtime = timeSlot1.elementAt(index);
                                     intslot = index;
                                     stringslot = intslot.toString();
                                     //hour
@@ -1141,7 +1150,7 @@ class _BookingPageState extends State<BookingPage> {
                           child: Card(
                             color: timeslots.contains(index)
                                 ? Colors.white10
-                                : selectedtime == timeSlot.elementAt(index)
+                                : selectedtime == timeSlot1.elementAt(index)
                                     ? Colors.deepOrange
                                     : Colors.white,
                             child: GridTile(
@@ -1150,7 +1159,7 @@ class _BookingPageState extends State<BookingPage> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(timeSlot.elementAt(index),
+                                  Text(timeSlot1.elementAt(index),
                                       style:
                                           Theme.of(context).textTheme.overline),
                                   Text(
