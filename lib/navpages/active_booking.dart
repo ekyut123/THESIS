@@ -31,6 +31,7 @@ int intslot = 0;
 String slot = "";
 String oldslot = "";
 late String modeofpayment;
+late String receipt;
 
 class _ActiveBookingPageState extends State<ActiveBookingPage> {
 
@@ -170,6 +171,8 @@ class _ActiveBookingPageState extends State<ActiveBookingPage> {
                       olddatetime: olddatetime,
                       oldslot: oldslot,
                       olddate: olddate,
+                      receipt: receipt,
+                      modeofpayment: modeofpayment,
                     )
                   )
                 );
@@ -197,6 +200,8 @@ class _ActiveBookingPageState extends State<ActiveBookingPage> {
                 timeslot = snapshot.data!['timeslot'];
                 date = snapshot.data!['date'];
                 intslot = snapshot.data!['slot'];
+                modeofpayment = snapshot.data!['modeofpayment'];
+                receipt = snapshot.data!['receipt'];
                 slot = intslot.toString();
 
                 if(modeofpayment == 'gcash'){
