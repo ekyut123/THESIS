@@ -1,15 +1,9 @@
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_users/admin/confirmReceipt.dart';
 import 'package:flutter_firebase_users/admin/data_source/paymentHistory_DB.dart';
 import 'package:flutter_firebase_users/admin/model/paymentHistory_model.dart';
 import 'package:flutter_firebase_users/admin/widget/app_minus_large_text.dart';
 import '../widgets/app_semi_large_text.dart';
-import 'paymentoptions.dart';
 
 //main payment history confirmreceipt paymenthistorymodel paymenthistorydb yaml
 class PaymentHistoryPage extends StatefulWidget {
@@ -24,39 +18,12 @@ late String receipt;
 late String date;
 
 class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
-  PlatformFile? pickedFile;
 
-  Future selectFile() async {
-    final result = await FilePicker.platform
-        .pickFiles(type: FileType.custom, allowedExtensions: [
-      'jpg',
-      'jpeg',
-      'png',
-      'jfif',
-    ]);
-    if (result == null) return;
-    setState(() {
-      pickedFile = result.files.first;
-    });
-  }
-
-  String bid = '';
   User? user = FirebaseAuth.instance.currentUser;
-  @override
-  void initState() {
-    super.initState();
-    FirebaseFirestore.instance
-        .collection("BusinessList")
-        .doc(user!.uid)
-        .get()
-        .then((value) {
-      var data = value.data() as Map;
-      bid = data['businessName'];
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
+    
     void showPaymentDetails() {
       showDialog(
           context: context,
@@ -83,39 +50,12 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
     }
 
     return Scaffold(
-        floatingActionButton: pickedFile == null
-            ? FloatingActionButton.extended(
-                onPressed: () {
-                  selectFile();
-                },
-                label: const Text('Submit Receipt'),
-                icon: const Icon(Icons.file_upload),
-                backgroundColor: Colors.deepOrange,
-              )
-            : null,
         appBar: AppBar(
-          title: const Text('Payment History'),
-          actions: [
-            Tooltip(
-              message: 'Payment Options',
-              child: IconButton(
-                  icon: const Icon(Icons.payment),
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const AdminPaymentOption()));
-                  }),
-            )
-          ],
+          title: const Text('Subscription History'),
         ),
-        body: pickedFile != null
-            ? ConfirmReceipt(
-                filepath: pickedFile!.path!,
-                businessname: bid,
-                userUid: user!.uid,
-              )
-            : StreamBuilder<List<PaymentModel>>(
-                stream: PaymentHistoryDB.readpaymenthistory(user!.uid),
-                builder: (context, snapshot) {
+        body: StreamBuilder<List<PaymentModel>>(
+          stream: PaymentHistoryDB.readpaymenthistory(user!.uid),
+          builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   }
