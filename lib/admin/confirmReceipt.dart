@@ -89,8 +89,7 @@ class ConfirmReceipt extends StatelessWidget {
                   children: [
                     TextButton(
                         onPressed: () {
-                          Navigator.of(context)
-                              .popAndPushNamed('/paymenthistory');
+                          Navigator.of(context).popAndPushNamed('/paymentpage');
                         },
                         child: const Text(
                           "Cancel",
@@ -119,8 +118,8 @@ class ConfirmReceipt extends StatelessWidget {
                                           style: TextStyle(color: Colors.white),
                                         ),
                                         onPressed: () {
-                                          Navigator.of(context).popAndPushNamed(
-                                              '/paymenthistory');
+                                          Navigator.of(context)
+                                              .popAndPushNamed('/paymentpage');
                                         })
                                   ],
                                 );
