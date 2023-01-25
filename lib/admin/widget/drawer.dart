@@ -77,8 +77,8 @@ class AdminDrawer extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => const MessagesWidget(
-                        ),
+                        builder: (BuildContext context) =>
+                            const MessagesWidget(),
                       ));
                 })),
             const SizedBox(height: 10.0),
@@ -89,8 +89,7 @@ class AdminDrawer extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => const PaymentPage(
-                        ),
+                        builder: (BuildContext context) => const PaymentPage(),
                       ));
                 })),
             const SizedBox(height: 10.0),
@@ -130,7 +129,11 @@ class AdminDrawer extends StatelessWidget {
                 ),
                 SizedBox(
                   child: GestureDetector(
-                    onTap: _signOut,
+                    onTap: () {
+                      _signOut();
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/main', (Route<dynamic> route) => false);
+                    },
                     child: const Text(
                       "Logout",
                       style: TextStyle(
