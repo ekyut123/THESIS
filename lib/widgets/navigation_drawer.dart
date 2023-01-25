@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_users/main.dart';
+import 'package:flutter_firebase_users/myhome.dart';
 import 'package:flutter_firebase_users/navpages/booking_history.dart';
 import '../navpages/active_booking.dart';
 import '../navpages/contact-us_page.dart';
@@ -130,7 +132,11 @@ class NavigationDrawerWidget extends StatelessWidget {
                         ),
                         SizedBox(
                           child: GestureDetector(
-                            onTap: _signOut,
+                            onTap: () {
+                              _signOut();
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  '/main', (Route<dynamic> route) => false);
+                            },
                             child: const Text(
                               "Logout",
                               style: TextStyle(
