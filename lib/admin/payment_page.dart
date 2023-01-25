@@ -14,11 +14,10 @@ class PaymentPage extends StatefulWidget {
 
 late String picture;
 
-
 class _PaymentPageState extends State<PaymentPage> {
+  CollectionReference qr =
+      FirebaseFirestore.instance.collection('Admin Payment Option');
 
-  CollectionReference qr = FirebaseFirestore.instance.collection('Admin Payment Option');
-  
   PlatformFile? pickedFile;
   Future selectFile() async {
     final result = await FilePicker.platform
@@ -51,92 +50,91 @@ class _PaymentPageState extends State<PaymentPage> {
 
   @override
   Widget build(BuildContext context) {
-
-    void showGCashQR(){
+    void showGCashQR() {
       showDialog(
-        context: context,
-        builder: (BuildContext context){
-          return FutureBuilder(
-            future: qr.doc('N9ridEkbcR3mv5cw3WGA').get(),
-            builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-              if(snapshot.hasData){
-                Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-                picture = data['picture'];
+          context: context,
+          builder: (BuildContext context) {
+            return FutureBuilder(
+                future: qr.doc('N9ridEkbcR3mv5cw3WGA').get(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  if (snapshot.hasData) {
+                    Map<String, dynamic> data =
+                        snapshot.data!.data() as Map<String, dynamic>;
+                    picture = data['picture'];
 
-                return AlertDialog(
-                title: const Text('QR Code',
-                  style: TextStyle(color: Colors.deepOrange)
-                  ),
-                content: Image.network(picture),
-                actions: [
-                  TextButton(style: TextButton.styleFrom(
-                    backgroundColor: Colors.deepOrange,
-                  ),
-                  child: const Text(
-                    "Exit",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop(const PaymentPage());
-                    }
-                  )
-                ],
-              );
-              }
-              return const Center(child: CircularProgressIndicator());
-            }
-          );
-        });
+                    return AlertDialog(
+                      title: const Text('QR Code',
+                          style: TextStyle(color: Colors.deepOrange)),
+                      content: Image.network(picture),
+                      actions: [
+                        TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: Colors.deepOrange,
+                            ),
+                            child: const Text(
+                              "Exit",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop(const PaymentPage());
+                            })
+                      ],
+                    );
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                });
+          });
     }
 
-    void showBPIQR(){
+    void showBPIQR() {
       showDialog(
-        context: context,
-        builder: (BuildContext context){
-          return FutureBuilder(
-            future: qr.doc('jtBLhIV3IRcQlLQsL6Cj').get(),
-            builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-              if(snapshot.hasData){
-                Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-                picture = data['picture'];
+          context: context,
+          builder: (BuildContext context) {
+            return FutureBuilder(
+                future: qr.doc('jtBLhIV3IRcQlLQsL6Cj').get(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  if (snapshot.hasData) {
+                    Map<String, dynamic> data =
+                        snapshot.data!.data() as Map<String, dynamic>;
+                    picture = data['picture'];
 
-                return AlertDialog(
-                title: const Text('QR Code',
-                  style: TextStyle(color: Colors.deepOrange)
-                  ),
-                content: Image.network(picture),
-                actions: [
-                  TextButton(style: TextButton.styleFrom(
-                    backgroundColor: Colors.deepOrange,
-                  ),
-                  child: const Text(
-                    "Exit",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop(const PaymentPage());
-                    }
-                  )
-                ],
-              );
-              }
-              return const Center(child: CircularProgressIndicator());
-            }
-          );
-        });
+                    return AlertDialog(
+                      title: const Text('QR Code',
+                          style: TextStyle(color: Colors.deepOrange)),
+                      content: Image.network(picture),
+                      actions: [
+                        TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: Colors.deepOrange,
+                            ),
+                            child: const Text(
+                              "Exit",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop(const PaymentPage());
+                            })
+                      ],
+                    );
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                });
+          });
     }
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Payments'),
       ),
       body: pickedFile != null
-            ? ConfirmReceipt(
-                filepath: pickedFile!.path!,
-                businessname: bid,
-                userUid: user!.uid,
-              )
-            : SingleChildScrollView(
+          ? ConfirmReceipt(
+              filepath: pickedFile!.path!,
+              businessname: bid,
+              userUid: user!.uid,
+            )
+          : SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -145,7 +143,8 @@ class _PaymentPageState extends State<PaymentPage> {
                     padding: const EdgeInsets.all(20),
                     child: const Text(
                         '*For subscription, please refer to the following payment options and submit the receipt of payment for validation purposes.*',
-                        style: TextStyle(color: Colors.deepOrange, fontSize: 15),
+                        style:
+                            TextStyle(color: Colors.deepOrange, fontSize: 15),
                         textAlign: TextAlign.justify),
                   ),
                   Padding(
@@ -154,17 +153,14 @@ class _PaymentPageState extends State<PaymentPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: const [
                         Icon(Icons.payment,
-                        size: 100,
-                        color: Colors.deepOrange),
+                            size: 100, color: Colors.deepOrange),
                         Text(
                           "Payment Options",
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black
-                          ),
-                          
+                              fontSize: 30,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black),
                         )
                       ],
                     ),
@@ -177,19 +173,16 @@ class _PaymentPageState extends State<PaymentPage> {
                         child: Text(
                           "1. GCASH",
                           style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.w700
-                          ),
+                              fontSize: 25, fontWeight: FontWeight.w700),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(right: 15),
-                        child: TextButton(
-                          onPressed: () {
-                            showGCashQR();
-                          },
-                          child: const Text('QR Code')
-                        ),
+                        child: ElevatedButton(
+                            onPressed: () {
+                              showGCashQR();
+                            },
+                            child: const Text('QR Code')),
                       )
                     ],
                   ),
@@ -199,18 +192,13 @@ class _PaymentPageState extends State<PaymentPage> {
                       Padding(
                         padding: EdgeInsets.only(left: 50),
                         child: Text('Account Name:  ',
-                          style: TextStyle(
-                            fontSize: 15
-                          )
-                        ),
+                            style: TextStyle(fontSize: 15)),
                       ),
                       Padding(
                         padding: EdgeInsets.only(right: 70),
                         child: Text('SRVCS Company',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold
-                        )),
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold)),
                       ),
                     ],
                   ),
@@ -220,22 +208,16 @@ class _PaymentPageState extends State<PaymentPage> {
                       Padding(
                         padding: EdgeInsets.only(left: 50, top: 15),
                         child: Text('Account Number:  ',
-                          style: TextStyle(
-                            fontSize: 15
-                          )
-                        ),
+                            style: TextStyle(fontSize: 15)),
                       ),
                       Padding(
                         padding: EdgeInsets.only(right: 70, top: 15),
                         child: Text('09053730234',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold
-                        )),
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold)),
                       ),
                     ],
                   ),
-                  
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -244,19 +226,16 @@ class _PaymentPageState extends State<PaymentPage> {
                         child: Text(
                           "2. BPI",
                           style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.w700
-                          ),
+                              fontSize: 25, fontWeight: FontWeight.w700),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(right: 15, top: 25),
-                        child: TextButton(
-                          onPressed: () {
-                            showBPIQR();
-                          },
-                          child: const Text('QR Code')
-                        ),
+                        child: ElevatedButton(
+                            onPressed: () {
+                              showBPIQR();
+                            },
+                            child: const Text('QR Code')),
                       )
                     ],
                   ),
@@ -266,18 +245,13 @@ class _PaymentPageState extends State<PaymentPage> {
                       Padding(
                         padding: EdgeInsets.only(left: 50),
                         child: Text('Account Name:  ',
-                          style: TextStyle(
-                            fontSize: 15
-                          )
-                        ),
+                            style: TextStyle(fontSize: 15)),
                       ),
                       Padding(
                         padding: EdgeInsets.only(right: 70),
                         child: Text('SRVCS Company',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold
-                        )),
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold)),
                       ),
                     ],
                   ),
@@ -287,39 +261,34 @@ class _PaymentPageState extends State<PaymentPage> {
                       Padding(
                         padding: EdgeInsets.only(left: 50, top: 15),
                         child: Text('Account Number:  ',
-                          style: TextStyle(
-                            fontSize: 15
-                          )
-                        ),
+                            style: TextStyle(fontSize: 15)),
                       ),
                       Padding(
                         padding: EdgeInsets.only(right: 70, top: 15),
                         child: Text('08812345678',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold
-                        )),
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold)),
                       ),
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 30, right: 30, top: 20),
+                    padding:
+                        const EdgeInsets.only(left: 30, right: 30, top: 80),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const PaymentHistoryPage()));
-                          },
-                          child: const Text('Subscription History')
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            selectFile();
-                          },
-                          child: const Text('Upload Receipt')
-                        )
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      const PaymentHistoryPage()));
+                            },
+                            child: const Text('Subscription History')),
+                        ElevatedButton(
+                            onPressed: () {
+                              selectFile();
+                            },
+                            child: const Text('Upload Receipt'))
                       ],
                     ),
                   )
