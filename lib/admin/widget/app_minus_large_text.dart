@@ -7,7 +7,7 @@ class AppMinusLargeText extends StatelessWidget {
   final Color color;
   AppMinusLargeText(
       {Key? key,
-      this.size = 20,
+      this.size = 17,
       required this.text,
       this.color = Colors.deepOrange})
       : super(key: key);
