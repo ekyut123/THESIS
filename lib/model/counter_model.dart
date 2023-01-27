@@ -12,9 +12,11 @@ class CounterModel {
   final String closinghour;
   final String businessaddress;
   final int counter;
+  final bool isSubbed;
 
   const CounterModel(
-      {required this.businessid,
+      {required this.isSubbed,
+      required this.businessid,
       required this.businessName,
       required this.businessDescription,
       required this.businessType,
@@ -24,13 +26,13 @@ class CounterModel {
       required this.closingday,
       required this.closinghour,
       required this.businessaddress,
-      required this.counter
-      });
+      required this.counter});
 
   factory CounterModel.fromSnapshot(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
 
     return CounterModel(
+        isSubbed: snapshot['isSubbed'],
         businessid: snapshot['businessid'],
         businessName: snapshot['businessName'],
         businessDescription: snapshot['businessDescription'],
@@ -41,8 +43,7 @@ class CounterModel {
         closingday: snapshot['closing day'],
         closinghour: snapshot['closing hour'],
         businessaddress: snapshot['business address'],
-        counter: snapshot['counter']
-        );
+        counter: snapshot['counter']);
   }
 
   Map<String, dynamic> toJson() => {
