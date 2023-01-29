@@ -98,7 +98,8 @@ class _SignupPageState extends State<SignupPage> {
           document["opening day"],
           document["opening hour"],
           document["personalEmail"],
-          document["personalPhone"]);
+          document["personalPhone"],
+          document["isSubbed"]);
     }
     if (!mounted) return;
     Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
@@ -120,6 +121,7 @@ class _SignupPageState extends State<SignupPage> {
     String ohour,
     String pemail,
     String pphone,
+    bool isSubbed,
   ) async {
     int counter = 0;
     final docCounter = FirebaseFirestore.instance
@@ -128,6 +130,7 @@ class _SignupPageState extends State<SignupPage> {
         .collection('Booked Counter')
         .doc(businessId);
     final json = {
+      'isSubbed': isSubbed,
       'businessid': businessId,
       'counter': counter,
       'business address': add,
@@ -170,8 +173,6 @@ class _SignupPageState extends State<SignupPage> {
   final passwordValidator = MultiValidator([
     RequiredValidator(errorText: 'password is required'),
     MinLengthValidator(6, errorText: 'password must be at least 6 digits long'),
-    PatternValidator(r'(?=.*?[#?!@$%^&*-])',
-        errorText: 'password must have at least one special character')
   ]);
 
   final emailValidator = MultiValidator(
