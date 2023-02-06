@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_users/navpages/all_care.dart';
 import 'package:flutter_firebase_users/navpages/healthcare_list.dart';
 import 'package:flutter_firebase_users/navpages/personalcare_list.dart';
 import 'package:flutter_firebase_users/searchdelegate.dart';
@@ -35,7 +36,7 @@ class _ConsumerPageState extends State<ConsumerPage>
 
   @override
   Widget build(BuildContext context) {
-    TabController tabController = TabController(length: 2, vsync: this);
+    TabController tabController = TabController(length: 3, vsync: this);
     TextEditingController textController = TextEditingController();
     return Scaffold(
         drawer: const NavigationDrawerWidget(),
@@ -70,6 +71,7 @@ class _ConsumerPageState extends State<ConsumerPage>
                       tabs: const [
                         Tab(text: "Personal Care"),
                         Tab(text: "Health Care"),
+                        Tab(text: "All Care")
                       ]),
                 ),
               ),
@@ -82,7 +84,8 @@ class _ConsumerPageState extends State<ConsumerPage>
                     controller: tabController,
                     children: [
                       PersonalCareList(label: "Personal Care", uid: userid),
-                      HealthCareList(label: "Health Care", uid: userid)
+                      HealthCareList(label: "Health Care", uid: userid),
+                      AllCareList(uid: userid)
                     ],
                   )),
             ],
