@@ -465,29 +465,49 @@ class _ActiveBookingPageState extends State<ActiveBookingPage> {
         }
         if (snapshot.hasData){
           final activebooking = snapshot.data;
+          final List<ActiveBooking> finalactive = [];
+          final dt = DateTime.now();
+          final int DV = 0;
+          //day
+          final String day = DateFormat.d().format(dt);
+          final intdaynow = int.tryParse(day) ?? DV;
+          //year
+          final String year = DateFormat.y().format(dt);
+          final int intyearnow = int.tryParse(year) ?? DV;
+          //month
+          final String month = DateFormat.M().format(dt);
+          final int intmonthnow = int.tryParse(month) ?? DV;
+
+          for(var data in activebooking!){
+            if(intyearnow < data.intyr || intyearnow == data.intyr){
+            }if(intmonthnow < data.intmonth || intmonthnow == data.intmonth){
+            }if(intdaynow < data.intdy || intdaynow == data.intdy){
+              finalactive.add(data);
+            }
+          }
             return Scaffold(
               appBar: AppBar(
                 title: const Text("Active Booking"),
               ),
               body: ListView.builder(
-                  itemCount: activebooking!.length,
+                  itemCount: finalactive.length,
                   itemBuilder: (context, index) {
                     return Card(
                       color: Colors.white70,
                       child: ListTile(
-                        title: AppSemiLargeText(text: activebooking[index].businessname),
+                        title: AppSemiLargeText(text: finalactive[index].businessname),
                         subtitle: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(activebooking[index].servicename),
-                            Text(activebooking[index].date),
+                            Text(finalactive[index].servicename),
+                            Text(finalactive[index].date),
                           ],
                         ),
                         trailing: ElevatedButton(
                           child: const Text('More Info'),
                           onPressed: () {
-                            datetime = activebooking[index].datetime;
+                            datetime = finalactive[index].datetime;
                             showMoreInfoDialog();
                           },
                           style: ElevatedButton.styleFrom(
