@@ -12,6 +12,8 @@ class BusinessInfo {
   final String closinghour;
   final String businessaddress;
   final bool hasGCash;
+  final bool isSubbed;
+  final int counter;
 
   BusinessInfo(
       {required this.businessid,
@@ -25,6 +27,8 @@ class BusinessInfo {
       required this.closinghour,
       required this.businessaddress,
       required this.hasGCash,
+      required this.isSubbed,
+      required this.counter
     });
 
   factory BusinessInfo.fromSnapshot(DocumentSnapshot snap) {
@@ -42,6 +46,8 @@ class BusinessInfo {
         closinghour: snapshot['closing hour'],
         businessaddress: snapshot['business address'],
         hasGCash: snapshot['hasGCash'],
+        isSubbed: snapshot['isSubbed'],
+        counter: snapshot['counter']
       );
   }
 
@@ -56,6 +62,8 @@ class BusinessInfo {
         "closing day": closingday,
         "closing hour": closinghour,
         "business address": businessaddress,
-        "hasGCash": hasGCash
+        "hasGCash": hasGCash,
+        "isSubbed": isSubbed,
+        "counter": counter
       };
 }
