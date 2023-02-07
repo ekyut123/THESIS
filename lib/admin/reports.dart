@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_firebase_users/admin/data_source/accomplished_DB.dart';
@@ -35,10 +37,17 @@ class _SummaryReportState extends State<SummaryReport> {
   double totalCanc = 0;
   double dateAcc = 0;
   double dateCanc = 0;
-
+  int price = 0;
+  int xprice = 0;
+  int dateprice = 0;
+  int datexprice = 0;
   @override
   void initState() {
-    dateInput.text = ""; //set the initial value of text field
+    dateInput.text = "";
+    price = 0;
+    xprice = 0;
+    dateprice = 0;
+    datexprice = 0; //set the initial value of text field
     super.initState();
   }
 
@@ -110,10 +119,16 @@ class _SummaryReportState extends State<SummaryReport> {
                         return const Center(child: CircularProgressIndicator());
                       }
                       if (snapshot.hasError) {
+                        print(snapshot.error);
                         return const Center(child: Text('some error occured'));
                       }
                       if (snapshot.hasData) {
+                        dateprice = 0;
                         totalAcc = snapshot.data!.length.toDouble();
+                        snapshot.data!.forEach((x) {
+                          datexprice = int.parse(x.price);
+                          dateprice = dateprice + datexprice;
+                        });
                         return StreamBuilder(
                           stream:
                               CancelledDB.readCancelledDate(user!.uid, date),
@@ -124,6 +139,7 @@ class _SummaryReportState extends State<SummaryReport> {
                                   child: CircularProgressIndicator());
                             }
                             if (snapshot.hasError) {
+                              print(snapshot.error);
                               return const Center(
                                   child: Text('some error occured'));
                             }
@@ -147,6 +163,14 @@ class _SummaryReportState extends State<SummaryReport> {
                                       )),
                                     ),
                                     pieChart(totalAcc, totalCanc),
+                                    const SizedBox(
+                                      height: 40,
+                                    ),
+                                    Text(
+                                      'Total Revenue This Day : P${dateprice.toString()}',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
                                   ],
                                 );
                               }
@@ -168,10 +192,16 @@ class _SummaryReportState extends State<SummaryReport> {
                       return const Center(child: CircularProgressIndicator());
                     }
                     if (snapshot.hasError) {
+                      print(snapshot.error);
                       return const Center(child: Text('some error occured'));
                     }
                     if (snapshot.hasData) {
+                      price = 0;
                       dateAcc = snapshot.data!.length.toDouble();
+                      snapshot.data!.forEach((x) {
+                        xprice = int.parse(x.price);
+                        price = price + xprice;
+                      });
                       return StreamBuilder(
                         stream: CancelledDB.readCancelled(user!.uid),
                         builder: (context, snapshot) {
@@ -181,6 +211,7 @@ class _SummaryReportState extends State<SummaryReport> {
                                 child: CircularProgressIndicator());
                           }
                           if (snapshot.hasError) {
+                            print(snapshot.error);
                             return const Center(
                                 child: Text('some error occured'));
                           }
@@ -204,6 +235,14 @@ class _SummaryReportState extends State<SummaryReport> {
                                     )),
                                   ),
                                   pieChart(dateAcc, dateCanc),
+                                  const SizedBox(
+                                    height: 40,
+                                  ),
+                                  Text(
+                                    'Total Revenue : P${price.toString()}',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                  )
                                 ],
                               );
                             }
