@@ -169,13 +169,15 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
       int slot,
       int timestamp,
       String modeofpayment,
-      String receipt) async {
+      String receipt,
+      String price) async {
     final docAcc = FirebaseFirestore.instance
         .collection('BusinessList')
         .doc(user!.uid)
         .collection('Accomplished')
         .doc();
     final accjson = {
+      'price': price,
       'modeofpayment': modeofpayment,
       'receipt': receipt,
       'date': date,
@@ -494,7 +496,8 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
                                                                                 slot[index].slot,
                                                                                 slot[index].timeStamp,
                                                                                 slot[index].modeofpayment,
-                                                                                slot[index].receipt);
+                                                                                slot[index].receipt,
+                                                                                slot[index].price);
                                                                             await storeBookingHistory(
                                                                                 date,
                                                                                 slot[index].consumerid,
