@@ -27,6 +27,7 @@ class ReschedulePage extends StatefulWidget {
   late int intyr;
   final String receipt;
   final String modeofpayment;
+  final int numres;
 
   ReschedulePage(
       {super.key,
@@ -40,6 +41,7 @@ class ReschedulePage extends StatefulWidget {
       required this.olddate,
       required this.receipt,
       required this.modeofpayment,
+      required this.numres
     });
 
   @override
@@ -843,7 +845,10 @@ class _ReschedulePageState extends State<ReschedulePage> {
       'consumerlastname': lastName,
       'consumerphonenum': phoneNumber,
       'modeofpayment': widget.modeofpayment,
-      'receipt': widget.receipt
+      'receipt': widget.receipt,
+      'intmonth': intmonth,
+      'intdy': intdy,
+      'intyr': intyr
     };
 
     //consumer
@@ -859,7 +864,11 @@ class _ReschedulePageState extends State<ReschedulePage> {
       'datetime': datetime,
       'date' : _d1,
       'modeofpayment': widget.modeofpayment,
-      'receipt': widget.receipt
+      'receipt': widget.receipt,
+      'intmonth': intmonth,
+      'intdy': intdy,
+      'intyr': intyr,
+      'numres': numres + 1
     };
 
     var setDate = {
@@ -880,6 +889,7 @@ class _ReschedulePageState extends State<ReschedulePage> {
     .then((value) => {
       _showConfirmedDialog()
     });
+
 
     //Submit on Firestore Consumer hindi
     final firestoreconsumer = FirebaseFirestore.instance
