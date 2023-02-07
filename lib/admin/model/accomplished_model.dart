@@ -12,11 +12,13 @@ class AccomplisedInfo {
       sdchosenserviceid,
       sdchosenservicename,
       timeslot,
-      docid;
+      docid,
+      price;
   final int slot, timeStamp;
 
   const AccomplisedInfo(
-      {required this.consumeremail,
+      {required this.price,
+      required this.consumeremail,
       required this.consumerid,
       required this.consumerlastname,
       required this.consumerfirstname,
@@ -35,6 +37,7 @@ class AccomplisedInfo {
     var snapshot = snap.data() as Map<String, dynamic>;
 
     return AccomplisedInfo(
+        price: snapshot['price'],
         consumeremail: snapshot['consumeremail'],
         consumerid: snapshot['consumerid'],
         consumerlastname: snapshot['consumerlastname'],
