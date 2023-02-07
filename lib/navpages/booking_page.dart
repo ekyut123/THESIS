@@ -53,6 +53,7 @@ late bool hasGCash;
 String? selecteditem = 'On Site Payment';
 late String gcash;
 late String gcashnum;
+late int totalcounter;
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 String email = "";
@@ -659,6 +660,7 @@ class _BookingPageState extends State<BookingPage> {
                           if (snapshot.hasData) {
                             hasGCash = snapshot.data!['hasGCash'];
                             type = snapshot.data!['businessType'];
+                            totalcounter = snapshot.data!['counter'];
                             return Scaffold(
                                 floatingActionButton:
                                     FloatingActionButton.extended(
@@ -1229,6 +1231,10 @@ class _BookingPageState extends State<BookingPage> {
         'consumerfirstname': firstName,
         'consumerlastname': lastName,
         'consumerphonenum': phoneNumber,
+        'intmonth': intmonth,
+        'intdy': intdy,
+        'intyr': intyr,
+        'price': servicePrice
       };
 
       //consumer
@@ -1245,6 +1251,10 @@ class _BookingPageState extends State<BookingPage> {
         'timeStamp': timeStamp,
         'datetime': datetime,
         'date': _d1,
+        'intmonth': intmonth,
+        'intdy': intdy,
+        'intyr': intyr,
+        'numres': 0
       };
     } else {
       submitBookingInfo = {
@@ -1264,6 +1274,10 @@ class _BookingPageState extends State<BookingPage> {
         'consumerfirstname': firstName,
         'consumerlastname': lastName,
         'consumerphonenum': phoneNumber,
+        'intmonth': intmonth,
+        'intdy': intdy,
+        'intyr': intyr,
+        'price': servicePrice,
       };
 
       //consumer
@@ -1280,6 +1294,10 @@ class _BookingPageState extends State<BookingPage> {
         'timeStamp': timeStamp,
         'datetime': datetime,
         'date': _d1,
+        'intmonth': intmonth,
+        'intdy': intdy,
+        'intyr': intyr,
+        'numres': 0
       };
     }
 
@@ -1315,5 +1333,12 @@ class _BookingPageState extends State<BookingPage> {
         .collection('Booked Counter')
         .doc(businessid)
         .set({'counter': FieldValue.increment(1)}, SetOptions(merge: true));
+
+    // Update total counter
+    await FirebaseFirestore.instance
+      .collection('BusinessList')
+      .doc(businessid)
+      .set({'counter': FieldValue.increment(1)}, SetOptions(merge: true));
   }
+      
 }
