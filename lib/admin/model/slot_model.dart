@@ -14,11 +14,13 @@ class SlotInfo {
       sdchosenservicename,
       timeslot,
       modeofpayment,
-      receipt;
+      receipt,
+      price;
   final int slot, timeStamp;
 
   const SlotInfo(
-      {required this.receipt,
+      {required this.price,
+      required this.receipt,
       required this.modeofpayment,
       required this.accomplished,
       required this.consumeremail,
@@ -39,6 +41,7 @@ class SlotInfo {
     var snapshot = snap.data() as Map<String, dynamic>;
 
     return SlotInfo(
+        price: snapshot['price'],
         receipt: snapshot['receipt'],
         modeofpayment: snapshot['modeofpayment'],
         accomplished: snapshot['accomplished'],
