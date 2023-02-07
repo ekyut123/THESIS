@@ -32,6 +32,7 @@ String slot = "";
 String oldslot = "";
 late String modeofpayment;
 late String receipt;
+late int numres;
 
 class _ActiveBookingPageState extends State<ActiveBookingPage> {
 
@@ -173,6 +174,7 @@ class _ActiveBookingPageState extends State<ActiveBookingPage> {
                       olddate: olddate,
                       receipt: receipt,
                       modeofpayment: modeofpayment,
+                      numres: numres,
                     )
                   )
                 );
@@ -203,6 +205,7 @@ class _ActiveBookingPageState extends State<ActiveBookingPage> {
                 modeofpayment = snapshot.data!['modeofpayment'];
                 receipt = snapshot.data!['receipt'];
                 slot = intslot.toString();
+                numres = snapshot.data!['numres'];
 
                 if(modeofpayment == 'gcash'){
                   return AlertDialog(
@@ -301,13 +304,20 @@ class _ActiveBookingPageState extends State<ActiveBookingPage> {
                     //resched
                     TextButton(
                       style: TextButton.styleFrom(
-                        backgroundColor: Colors.deepOrange,
+                        backgroundColor: numres == 2 ? Colors.grey : Colors.deepOrange,
                       ),
                       child: const Text(
                         "Reschedule",
                         style: TextStyle(color: Colors.white),
                       ),
-                      onPressed: () {
+                      onPressed: numres == 2 ? null : () {
+                        // if(numres < 2){
+                        //   olddate = date;
+                        //   olddatetime = datetime;
+                        //   oldslot = slot;
+                        //   Navigator.of(context).pop();
+                        //   showReschedDialog();
+                        // }
                         olddate = date;
                         olddatetime = datetime;
                         oldslot = slot;
@@ -428,13 +438,13 @@ class _ActiveBookingPageState extends State<ActiveBookingPage> {
                     //resched
                     TextButton(
                       style: TextButton.styleFrom(
-                        backgroundColor: Colors.deepOrange,
+                        backgroundColor: numres == 2 ? Colors.grey : Colors.deepOrange,
                       ),
                       child: const Text(
                         "Reschedule",
                         style: TextStyle(color: Colors.white),
                       ),
-                      onPressed: () {
+                      onPressed: numres == 2 ? null : (){
                         olddate = date;
                         olddatetime = datetime;
                         oldslot = slot;
@@ -452,7 +462,8 @@ class _ActiveBookingPageState extends State<ActiveBookingPage> {
         }
       );
     }
-    
+
+
     return StreamBuilder<List<ActiveBooking>>(
       stream: ReadDataBase.readactivebooking(userid),
       builder: (context, snapshot) {
