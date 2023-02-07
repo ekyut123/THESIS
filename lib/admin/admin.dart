@@ -197,7 +197,7 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
     await docAcc.set(accjson);
   }
 
-  bool isSubbed = false;
+  bool isSubbed = true;
   User? user = FirebaseAuth.instance.currentUser;
 
   @override
